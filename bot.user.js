@@ -1459,25 +1459,27 @@ var bot = window.bot = (function (window) {
 
         //Determine if there are any new kills caused by your snake.
          calculateKillCount: function () {
-         console.log('Current Bot position - xx:' + bot.MID_X + ', yy:' + bot.MID_Y);
-         console.log('Snakes:');
-            console.log(window.snakes);
             for (var i = 0; i < window.preys.length && window.preys[i] !== null; i++) {
                 var prey = window.preys[i];
-                console.log('Prey:');
-                console.log(prey);
                 if (prey.eaten === true && prey.eaten_by.id === bot.id) {
                     if (bot.kills.indexOf(prey.id) < 0) {
                         console.log('Adding kill to tally for prey with ID: ' + prey.id);
                         bot.kills.add(prey);
+                        console.log('Kill count: ' + bot.kills.length);
                     }
                 }
             }
          },
 
-         //Get the snake ID of the current bot.
-         getBotSnakeId: function () {
-
+         //Set the snake ID of the current bot. Should only be called once.
+         setBotSnakeId: function () {
+            console.log('Snakes:');
+            console.log(window.snakes);
+            if (bot.id === 0) {
+                var id = window.snakes[0].id;
+                console.log('Setting bot snake ID to: ' + id);
+                bot.id = id;
+            }
          },
 
         computeFoodGoal: function () {
@@ -2157,6 +2159,7 @@ var userInterface = window.userInterface = (function (window, document) {
             if (window.playing && bot.isBotEnabled && window.snake !== null) {
                 window.onmousemove = function () { };
                 bot.isBotRunning = true;
+                bot.setBotSnakeId();
                 bot.go();
             } else if (bot.isBotEnabled && bot.isBotRunning) {
                 bot.isBotRunning = false;

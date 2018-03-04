@@ -8,7 +8,7 @@ The MIT License (MIT)
 // ==UserScript==
 // @name         Slither.io Bot Championship Edition
 // @namespace    https://github.com/oksenyah/Slither.io-bot
-// @version      3.0.6.7
+// @version      3.0.6.8
 // @description  Slither.io Bot Championship Edition
 // @author       Ok Senyah
 // @match        http://slither.io/
@@ -675,12 +675,12 @@ var bot = window.bot = (function (window) {
                         da: Math.abs(bot.angleBetween(ang, window.snake.ehang)),
                         distance: f.distance,
                         sz: f.sz,
-                        score: (Math.pow(f.sz, 2) / f.distance / f.clusterRatio)
+                        score: (Math.pow(f.sz, 2) / f.distance * f.clusterRatio)
                     };
                 } else {
                     bot.foodAngles[aIndex].sz += Math.round(f.sz);
 //                    console.log('Food\'s original score: ' + bot.foodAngles[aIndex].score);
-                    bot.foodAngles[aIndex].score += (Math.pow(f.sz, 2) / f.distance / f.clusterRatio);
+                    bot.foodAngles[aIndex].score += (Math.pow(f.sz, 2) / f.distance * f.clusterRatio);
 //                    console.log('Total Cluster Distance of Food: ' + f.clusterRatio);
 //                    console.log('[Best] Original score to add: ' + (Math.pow(f.sz, 2) / f.distance));
 //                    console.log('[Worst] New score to add (v1): ' + ((Math.pow(f.sz, 2) / f.distance) - f.clusterRatio));
@@ -1471,7 +1471,7 @@ var bot = window.bot = (function (window) {
                                     totalClusterDistance += distanceFromCurrentFood;
                                     numberOfFoodsInRadius++;
 
-                                    f.clusterRatio = 1 - (numberOfFoodsInRadius / totalClusterDistance);
+                                    f.clusterRatio = (numberOfFoodsInRadius / totalClusterDistance);
                                 }
                             }
 //                            console.log('Number of foods in radius: ' + numberOfFoodsInRadius);

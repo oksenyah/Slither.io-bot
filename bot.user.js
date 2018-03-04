@@ -1437,7 +1437,7 @@ var bot = window.bot = (function (window) {
 
             for (var i = 0; i < window.foods.length && window.foods[i] !== null; i++) {
                 var f = window.foods[i];
-
+                console.log(f);
                 if (!f.eaten &&
                     !(
                         canvas.circleIntersect(

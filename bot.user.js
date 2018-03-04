@@ -677,7 +677,7 @@ var bot = window.bot = (function (window) {
                     };
                 } else {
                     bot.foodAngles[aIndex].sz += Math.round(f.sz);
-                    bot.foodAngles[aIndex].score += (Math.pow(f.sz, 2) / f.distance) - f.clusterIndex;
+                    bot.foodAngles[aIndex].score += (Math.pow(f.sz - f.clusterIndex, 2) / f.distance);
                     if (bot.foodAngles[aIndex].distance > f.distance) {
                         bot.foodAngles[aIndex].x = Math.round(f.xx);
                         bot.foodAngles[aIndex].y = Math.round(f.yy);
@@ -1453,6 +1453,7 @@ var bot = window.bot = (function (window) {
                         var clusterFood = window.foods[j];
                         f.clusterIndex += Math.sqrt(Math.pow(f.xx - clusterFood.xx, 2) + Math.pow(f.yy - clusterFood.yy, 2));
                     }
+                    console.log('Current food\'s cluster index: + ' + f.clusterIndex);
                     bot.addFoodAngle(f);
                 }
             }

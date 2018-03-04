@@ -676,7 +676,7 @@ var bot = window.bot = (function (window) {
                     };
                 } else {
                     bot.foodAngles[aIndex].sz += Math.round(f.sz);
-                    bot.foodAngles[aIndex].score += Math.pow(f.sz, 2) / f.distance;
+                    bot.foodAngles[aIndex].score += (Math.pow(f.sz, 2) / f.distance) - f.clusterIndex;
                     if (bot.foodAngles[aIndex].distance > f.distance) {
                         bot.foodAngles[aIndex].x = Math.round(f.xx);
                         bot.foodAngles[aIndex].y = Math.round(f.yy);
@@ -1437,8 +1437,8 @@ var bot = window.bot = (function (window) {
 
             for (var i = 0; i < window.foods.length && window.foods[i] !== null; i++) {
                 var f = window.foods[i];
+                f.clusterIndex = 0;
 
-                console.log(f);
                 if (!f.eaten &&
                     !(
                         canvas.circleIntersect(
@@ -1447,6 +1447,11 @@ var bot = window.bot = (function (window) {
                         canvas.circleIntersect(
                             canvas.circle(f.xx, f.yy, 2),
                             bot.sidecircle_r))) {
+                    //calculate clustering index.
+                    for (var j = 0; j < window.foods.length && window.foods[j] !== null; j++) {
+                        var clusterFood = window.foods[j];
+                        f.clusterIndex += = Math.sqrt(Math.squared(f.xx - clusterFood.xx) + Math.squared(f.yy - clusterFood.yy));
+                    }
                     bot.addFoodAngle(f);
                 }
             }

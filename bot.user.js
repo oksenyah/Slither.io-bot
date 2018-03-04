@@ -1457,13 +1457,8 @@ var bot = window.bot = (function (window) {
             return a.distance - b.distance;
         },
 
-        //Determine if there are any new kills caused by your snake.
-         calculateKillCount: function () {
-            console.log(window);
-         },
-
-         //Set the snake ID of the current bot. Should only be called once.
-         setBotSnakeId: function () {
+        //Set the snake ID of the current bot. Should only be called once.
+        setBotSnakeId: function () {
             if (bot.id === 0) {
                 var id = window.snakes[0].id;
                 console.log('Setting bot snake ID to: ' + id);
@@ -1682,7 +1677,6 @@ var bot = window.bot = (function (window) {
         // Timer version of food check
         actionTimer: function () {
             if (window.playing && window.snake !== null && window.snake.alive_amt === 1) {
-                bot.calculateKillCount();
                 if (bot.stage === 'grow') {
                     bot.computeFoodGoal();
                     window.goalCoordinates = bot.currentFood;

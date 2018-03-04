@@ -1458,6 +1458,9 @@ var bot = window.bot = (function (window) {
         computeFoodGoal: function () {
             bot.foodAngles = [];
 
+            console.log('PREYS:');
+            console.log(window.preys);
+
             for (var i = 0; i < window.foods.length && window.foods[i] !== null; i++) {
                 var f = window.foods[i];
                 f.clusterRatio = 0.001; // Initialize cluster ratio to .001.

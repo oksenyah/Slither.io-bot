@@ -238,7 +238,7 @@ var canvas = window.canvas = (function (window) {
 
         // Get distance squared
         getDistance2: function (x1, y1, x2, y2) {
-            var distance2 = Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2);
+            var distance2 = Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
             return distance2;
         },
 

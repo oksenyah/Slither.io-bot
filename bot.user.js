@@ -8,7 +8,7 @@ The MIT License (MIT)
 // ==UserScript==
 // @name         Slither.io Bot Championship Edition
 // @namespace    https://github.com/oksenyah/Slither.io-bot
-// @version      3.0.6.6
+// @version      3.0.6.7
 // @description  Slither.io Bot Championship Edition
 // @author       Ok Senyah
 // @match        http://slither.io/
@@ -1474,9 +1474,9 @@ var bot = window.bot = (function (window) {
                                     f.clusterRatio = 1 - (numberOfFoodsInRadius / totalClusterDistance);
                                 }
                             }
-                            console.log('Number of foods in radius: ' + numberOfFoodsInRadius);
-                            console.log('Total cluster distance: ' + totalClusterDistance);
-                            console.log(f);
+//                            console.log('Number of foods in radius: ' + numberOfFoodsInRadius);
+//                            console.log('Total cluster distance: ' + totalClusterDistance);
+//                            console.log(f);
                             bot.addFoodAngle(f);
                 }
             }

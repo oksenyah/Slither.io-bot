@@ -8,7 +8,7 @@ The MIT License (MIT)
 // ==UserScript==
 // @name         Slither.io Bot Championship Edition
 // @namespace    https://github.com/oksenyah/Slither.io-bot
-// @version      3.0.6.7
+// @version      3.0.6.8
 // @description  Slither.io Bot Championship Edition
 // @author       Ok Senyah
 // @match        http://slither.io/
@@ -1465,7 +1465,7 @@ var bot = window.bot = (function (window) {
                                 var distanceFromCurrentFood = Math.sqrt(Math.pow(f.xx - clusterFood.xx, 2) + Math.pow(f.yy - clusterFood.yy, 2));
 
                                 //If food is close enough, then add distance to running tally and increment number of foods counted.
-                                if (distanceFromFood <= bot.opt.foodClusterRadius) {
+                                if (distanceFromCurrentFood <= bot.opt.foodClusterRadius) {
                                     totalClusterDistance += distanceFromCurrentFood;
                                     numberOfFoodsInRadius++;
                                     //Set cluster ratio to total distance within cluster, divided by number of foods in radius.

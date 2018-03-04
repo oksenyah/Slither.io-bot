@@ -12,8 +12,8 @@ The MIT License (MIT)
 // @description  Slither.io Bot Championship Edition
 // @author       Ok Senyah
 // @match        http://slither.io/
-// @updateURL    https://github.com/oksenyah/Slither.io-bot/blob/testing/bot.user.js
-// @downloadURL  https://github.com/oksenyah/Slither.io-bot/blob/testing/bot.user.js
+// @updateURL    https://github.com/oksenyah/Slither.io-bot/raw/testing/bot.user.js
+// @downloadURL  https://github.com/oksenyah/Slither.io-bot/raw/testing/bot.user.js
 // @supportURL   https://github.com/oksenyah/Slither.io-bot/issues
 // @grant        none
 // ==/UserScript==

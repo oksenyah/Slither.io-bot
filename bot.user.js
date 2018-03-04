@@ -1576,6 +1576,8 @@ var bot = window.bot = (function (window) {
 
             if (window.visualDebugging) {
                 canvas.drawCircle(bot.headCircle, 'blue', false);
+                canvas.drawCircle(bot.sidecircle_r, 'green', false);
+                canvas.drawCircle(bot.sidecircle_l, 'green', false);
             }
 
             bot.sidecircle_r = canvas.circle(

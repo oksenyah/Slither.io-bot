@@ -1488,7 +1488,7 @@ var bot = window.bot = (function (window) {
                                 }
                             }
 
-                            if (f.clusterRatio > 0.8) {
+                            if (f.clusterRatio > 0.5) {
                                 f.isDense = true;
                                 console.log('Number of foods in radius: ' + numberOfFoodsInRadius);
                                 console.log('Total cluster distance: ' + totalClusterDistance);

@@ -8,7 +8,7 @@ The MIT License (MIT)
 // ==UserScript==
 // @name         Slither.io Bot Championship Edition
 // @namespace    https://github.com/oksenyah/Slither.io-bot
-// @version      3.0.6.8
+// @version      3.0.6.9
 // @description  Slither.io Bot Championship Edition
 // @author       Ok Senyah
 // @match        http://slither.io/
@@ -1573,13 +1573,6 @@ var bot = window.bot = (function (window) {
                 bot.opt.radiusMult / 2 * bot.snakeRadius
             );
 
-
-            if (window.visualDebugging) {
-                canvas.drawCircle(bot.headCircle, 'blue', false);
-                canvas.drawCircle(bot.sidecircle_r, 'green', false);
-                canvas.drawCircle(bot.sidecircle_l, 'green', false);
-            }
-
             bot.sidecircle_r = canvas.circle(
                 window.snake.lnp.xx -
                 ((window.snake.lnp.yy + bot.sin * bot.snakeWidth) -
@@ -1599,6 +1592,14 @@ var bot = window.bot = (function (window) {
                     window.snake.lnp.xx),
                 bot.snakeWidth * bot.speedMult
             );
+
+
+            if (window.visualDebugging) {
+                canvas.drawCircle(bot.headCircle, 'blue', false);
+                canvas.drawCircle(bot.sidecircle_r, 'green', false);
+                canvas.drawCircle(bot.sidecircle_l, 'green', false);
+            }
+
         },
 
         // Main bot

@@ -8,7 +8,7 @@ The MIT License (MIT)
 // ==UserScript==
 // @name         Slither.io Bot Championship Edition
 // @namespace    https://github.com/oksenyah/Slither.io-bot
-// @version      3.0.6.6
+// @version      3.0.6.7
 // @description  Slither.io Bot Championship Edition
 // @author       Ok Senyah
 // @match        http://slither.io/
@@ -439,7 +439,9 @@ var bot = window.bot = (function (window) {
             // snake score to start circling on self
             followCircleLength: 5000,
             // direction for followCircle: +1 for counter clockwise and -1 for clockwise
-            followCircleDirection: +1
+            followCircleDirection: +1,
+            //radius of cluster distance to calculate for food.
+            foodClusterRadius: 250
         },
         MID_X: 0,
         MID_Y: 0,
@@ -673,18 +675,18 @@ var bot = window.bot = (function (window) {
                         da: Math.abs(bot.angleBetween(ang, window.snake.ehang)),
                         distance: f.distance,
                         sz: f.sz,
-                        score: (Math.pow(f.sz, 2) / f.distance / f.totalClusterDistance)
+                        score: (Math.pow(f.sz, 2) / f.distance / f.clusterRatio)
                     };
                 } else {
                     bot.foodAngles[aIndex].sz += Math.round(f.sz);
 //                    console.log('Food\'s original score: ' + bot.foodAngles[aIndex].score);
-                    bot.foodAngles[aIndex].score += (Math.pow(f.sz, 2) / f.distance / f.totalClusterDistance);
-                    console.log('Total Cluster Distance of Food: ' + f.totalClusterDistance);
+                    bot.foodAngles[aIndex].score += (Math.pow(f.sz, 2) / f.distance / f.clusterRatio);
+//                    console.log('Total Cluster Distance of Food: ' + f.clusterRatio);
 //                    console.log('[Best] Original score to add: ' + (Math.pow(f.sz, 2) / f.distance));
-//                    console.log('[Worst] New score to add (v1): ' + ((Math.pow(f.sz, 2) / f.distance) - f.totalClusterDistance));
-//                    console.log('[Small Negative Number] New score to add (v2): ' + ((Math.pow(f.sz, 2) - f.totalClusterDistance) / f.distance));
-//                    console.log('[Large Positive Number] New score to add (v3): ' + ((Math.pow(f.sz - f.totalClusterDistance, 2)) / f.distance));
-//                    console.log('[TRYING] New score to add (v4): ' + (Math.pow(f.sz, 2) / f.distance / f.totalClusterDistance));
+//                    console.log('[Worst] New score to add (v1): ' + ((Math.pow(f.sz, 2) / f.distance) - f.clusterRatio));
+//                    console.log('[Small Negative Number] New score to add (v2): ' + ((Math.pow(f.sz, 2) - f.clusterRatio) / f.distance));
+//                    console.log('[Large Positive Number] New score to add (v3): ' + ((Math.pow(f.sz - f.clusterRatio, 2)) / f.distance));
+//                    console.log('[TRYING] New score to add (v4): ' + (Math.pow(f.sz, 2) / f.distance / f.clusterRatio));
                     if (bot.foodAngles[aIndex].distance > f.distance) {
                         bot.foodAngles[aIndex].x = Math.round(f.xx);
                         bot.foodAngles[aIndex].y = Math.round(f.yy);
@@ -1445,7 +1447,9 @@ var bot = window.bot = (function (window) {
 
             for (var i = 0; i < window.foods.length && window.foods[i] !== null; i++) {
                 var f = window.foods[i];
-                f.totalClusterDistance = 0;
+                f.clusterRatio = 1; // Initialize cluster ratio to 1.
+                var totalClusterDistance = 0;
+                var numberOfFoodsInRadius = 0;
 
                 if (!f.eaten &&
                     !(
@@ -1455,13 +1459,21 @@ var bot = window.bot = (function (window) {
                         canvas.circleIntersect(
                             canvas.circle(f.xx, f.yy, 2),
                             bot.sidecircle_r))) {
-                    //calculate clustering index.
-                    for (var j = 0; j < window.foods.length && window.foods[j] !== null; j++) {
-                        var clusterFood = window.foods[j];
-                        f.totalClusterDistance += Math.sqrt(Math.pow(f.xx - clusterFood.xx, 2) + Math.pow(f.yy - clusterFood.yy, 2));
-                    }
-//                    console.log(f);
-                    bot.addFoodAngle(f);
+                            //calculate clustering index.
+                            for (var j = 0; j < window.foods.length && window.foods[j] !== null; j++) {
+                                var clusterFood = window.foods[j];
+                                var distanceFromCurrentFood = Math.sqrt(Math.pow(f.xx - clusterFood.xx, 2) + Math.pow(f.yy - clusterFood.yy, 2));
+
+                                //If food is close enough, then add distance to running tally and increment number of foods counted.
+                                if (distanceFromFood <= bot.opt.foodClusterRadius) {
+                                    totalClusterDistance += distanceFromCurrentFood;
+                                    numberOfFoodsInRadius++;
+                                    //Set cluster ratio to total distance within cluster, divided by number of foods in radius.
+                                    f.clusterRatio = totalClusterDistance / numberOfFoodsInRadius;
+                                }
+                            }
+        //                    console.log(f);
+                            bot.addFoodAngle(f);
                 }
             }
 

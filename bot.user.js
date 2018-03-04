@@ -1614,7 +1614,7 @@ var bot = window.bot = (function (window) {
                 window.snake.lnp.yy -
                 ((window.snake.lnp.xx + bot.cos * bot.snakeWidth) -
                     window.snake.lnp.xx),
-                (bot.snakeWidth * bot.snakeRadius)
+                bot.snakeWidth * bot.speedMult
             );
 
 

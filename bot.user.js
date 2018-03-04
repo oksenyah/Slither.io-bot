@@ -8,7 +8,7 @@ The MIT License (MIT)
 // ==UserScript==
 // @name         Slither.io Bot Championship Edition
 // @namespace    https://github.com/oksenyah/Slither.io-bot
-// @version      3.0.6.2
+// @version      3.0.6.3
 // @description  Slither.io Bot Championship Edition
 // @author       Ok Senyah
 // @match        http://slither.io/
@@ -679,14 +679,15 @@ var bot = window.bot = (function (window) {
                     };
                 } else {
                     bot.foodAngles[aIndex].sz += Math.round(f.sz);
-//                    console.log('Food\'s original score: ' + bot.foodAngles[aIndex].score);
+                    console.log('Food\'s original score: ' + bot.foodAngles[aIndex].score);
                     bot.foodAngles[aIndex].score += (Math.pow(f.sz, 2) / f.distance * f.clusterRatio);
-//                    console.log('Total Cluster Distance of Food: ' + f.clusterRatio);
-//                    console.log('[Best] Original score to add: ' + (Math.pow(f.sz, 2) / f.distance));
+                    console.log('Total Cluster Ratio of Food: ' + f.clusterRatio);
+                    console.log('[Best] Original score to add: ' + (Math.pow(f.sz, 2) / f.distance));
 //                    console.log('[Worst] New score to add (v1): ' + ((Math.pow(f.sz, 2) / f.distance) - f.clusterRatio));
 //                    console.log('[Small Negative Number] New score to add (v2): ' + ((Math.pow(f.sz, 2) - f.clusterRatio) / f.distance));
 //                    console.log('[Large Positive Number] New score to add (v3): ' + ((Math.pow(f.sz - f.clusterRatio, 2)) / f.distance));
 //                    console.log('[TRYING] New score to add (v4): ' + (Math.pow(f.sz, 2) / f.distance / f.clusterRatio));
+                    console.log('[TRYING] New score to add (v5): ' + (Math.pow(f.sz, 2) / f.distance * f.clusterRatio));
                     if (bot.foodAngles[aIndex].distance > f.distance) {
                         bot.foodAngles[aIndex].x = Math.round(f.xx);
                         bot.foodAngles[aIndex].y = Math.round(f.yy);
@@ -1585,12 +1586,12 @@ var bot = window.bot = (function (window) {
 
             bot.sidecircle_l = canvas.circle(
                 window.snake.lnp.xx +
-                ((window.snake.lnp.yy + bot.sin * (bot.opt.radiusMult / 2)) -
+                ((window.snake.lnp.yy + bot.sin * bot.snakeWidth) -
                     window.snake.lnp.yy),
                 window.snake.lnp.yy -
-                ((window.snake.lnp.xx + bot.cos * (bot.opt.radiusMult / 2)) -
+                ((window.snake.lnp.xx + bot.cos * bot.snakeWidth) -
                     window.snake.lnp.xx),
-                (bot.opt.radiusMult / 2 * bot.snakeRadius)
+                (bot.snakeWidth * bot.snakeRadius)
             );
 
 

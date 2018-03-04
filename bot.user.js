@@ -677,7 +677,14 @@ var bot = window.bot = (function (window) {
                     };
                 } else {
                     bot.foodAngles[aIndex].sz += Math.round(f.sz);
-                    bot.foodAngles[aIndex].score += ((Math.pow(f.sz, 2) - f.clusterIndex) / f.distance);
+                    console.log('Food\'s original score: ' + bot.foodAngles[aIndex].score);
+                    bot.foodAngles[aIndex].score += (Math.pow(f.sz, 2) / f.distance);
+                    console.log('Total Cluster Distance of Food: ' + bot.foodAngles[aIndex].totalClusterDistance);
+                    console.log('[Best] Original score to add: ' + (Math.pow(f.sz, 2) / f.distance));
+                    console.log('[Worst] New score to add (v1): ' + (Math.pow(f.sz, 2) / f.distance) - bot.foodAngles[aIndex].totalClusterDistance);
+                    console.log('[Unrated] New score to add (v2): ' + ((Math.pow(f.sz, 2) - bot.foodAngles[aIndex].totalClusterDistance) / f.distance));
+                    console.log('[Unrated] New score to add (v3): ' + ((Math.pow(f.sz - bot.foodAngles[aIndex].totalClusterDistance, 2)) / f.distance));
+                    console.log('[Unrated] New score to add (v4): ' + (Math.pow(f.sz, 2) / f.distance / bot.foodAngles[aIndex].totalClusterDistance));
                     if (bot.foodAngles[aIndex].distance > f.distance) {
                         bot.foodAngles[aIndex].x = Math.round(f.xx);
                         bot.foodAngles[aIndex].y = Math.round(f.yy);
@@ -1438,7 +1445,7 @@ var bot = window.bot = (function (window) {
 
             for (var i = 0; i < window.foods.length && window.foods[i] !== null; i++) {
                 var f = window.foods[i];
-                f.clusterIndex = 0;
+                f.totalClusterDistance = 0;
 
                 if (!f.eaten &&
                     !(
@@ -1451,9 +1458,8 @@ var bot = window.bot = (function (window) {
                     //calculate clustering index.
                     for (var j = 0; j < window.foods.length && window.foods[j] !== null; j++) {
                         var clusterFood = window.foods[j];
-                        f.clusterIndex += Math.sqrt(Math.pow(f.xx - clusterFood.xx, 2) + Math.pow(f.yy - clusterFood.yy, 2));
+                        f.totalClusterDistance += Math.sqrt(Math.pow(f.xx - clusterFood.xx, 2) + Math.pow(f.yy - clusterFood.yy, 2));
                     }
-                    console.log('Current food\'s cluster index: + ' + f.clusterIndex);
                     bot.addFoodAngle(f);
                 }
             }

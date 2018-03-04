@@ -1451,7 +1451,7 @@ var bot = window.bot = (function (window) {
                     //calculate clustering index.
                     for (var j = 0; j < window.foods.length && window.foods[j] !== null; j++) {
                         var clusterFood = window.foods[j];
-                        f.clusterIndex += = Math.sqrt(Math.squared(f.xx - clusterFood.xx) + Math.squared(f.yy - clusterFood.yy));
+                        f.clusterIndex += Math.sqrt(Math.squared(f.xx - clusterFood.xx) + Math.squared(f.yy - clusterFood.yy));
                     }
                     bot.addFoodAngle(f);
                 }

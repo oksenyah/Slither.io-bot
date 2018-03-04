@@ -8,7 +8,7 @@ The MIT License (MIT)
 // ==UserScript==
 // @name         Slither.io Bot Championship Edition
 // @namespace    https://github.com/oksenyah/Slither.io-bot
-// @version      3.0.6
+// @version      3.0.6.1
 // @description  Slither.io Bot Championship Edition
 // @author       Ok Senyah
 // @match        http://slither.io/
@@ -677,7 +677,7 @@ var bot = window.bot = (function (window) {
                     };
                 } else {
                     bot.foodAngles[aIndex].sz += Math.round(f.sz);
-                    bot.foodAngles[aIndex].score += (Math.pow(f.sz - f.clusterIndex, 2) / f.distance);
+                    bot.foodAngles[aIndex].score += ((Math.pow(f.sz, 2) - f.clusterIndex) / f.distance);
                     if (bot.foodAngles[aIndex].distance > f.distance) {
                         bot.foodAngles[aIndex].x = Math.round(f.xx);
                         bot.foodAngles[aIndex].y = Math.round(f.yy);

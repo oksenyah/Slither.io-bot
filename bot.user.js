@@ -400,6 +400,7 @@ var bot = window.bot = (function (window) {
     return {
         isBotRunning: false,
         isBotEnabled: true,
+        isSelfCirclingEnabled: false,
         stage: 'grow',
         collisionPoints: [],
         collisionAngles: [],
@@ -1586,7 +1587,7 @@ var bot = window.bot = (function (window) {
                 bot.currentFood = undefined;
             }
 
-            if (bot.stage === 'circle') {
+            if (bot.stage === 'circle' && !bot.isSelfCirclingEnabled) {
                 window.setAcceleration(bot.defaultAccel);
                 bot.followCircleSelf();
             } else if (bot.checkCollision() || bot.checkEncircle()) {
@@ -1858,6 +1859,10 @@ var userInterface = window.userInterface = (function (window, document) {
                 if (e.keyCode === 84) {
                     bot.isBotEnabled = !bot.isBotEnabled;
                 }
+                // Letter `C` to toggle self-circling
+                if (e.keyCode === 67) {
+                    bot.isSelfCirclingEnabled = !bot.isSelfCirclingEnabled;
+                }
                 // Letter 'U' to toggle debugging (console)
                 if (e.keyCode === 85) {
                     window.logDebugging = !window.logDebugging;
@@ -1991,6 +1996,7 @@ var userInterface = window.userInterface = (function (window, document) {
 
             oContent.push('version: ' + GM_info.script.version);
             oContent.push('[T] bot: ' + ht(bot.isBotEnabled));
+            oContent.push('[C] self-circling bot: ' + ht(bot.isSelfCirclingEnabled));
             oContent.push('[O] mobile rendering: ' + ht(window.mobileRender));
             oContent.push('[A/S] radius multiplier: ' + bot.opt.radiusMult);
             oContent.push('[I] auto respawn: ' + ht(window.autoRespawn));

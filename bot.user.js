@@ -1490,12 +1490,12 @@ var bot = window.bot = (function (window) {
 //                            console.log('Number of foods in radius: ' + numberOfFoodsInRadius);
 //                            console.log('Total cluster distance: ' + totalClusterDistance);
 //                            console.log(f);
-                            if (f.clusterRatio > 20) {
+                            if (f.clusterRatio > 5) {
                                 f.isDense = true;
                             } else {
                                 f.isDense = false;
                             }
-                            if (f.clusterRatio <= 0.02) {
+                            if (f.clusterRatio <= 0.023) {
                                 f.isSparse = true;
                             } else {
                                 f.isSparse = false;

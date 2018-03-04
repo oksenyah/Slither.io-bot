@@ -8,7 +8,7 @@ The MIT License (MIT)
 // ==UserScript==
 // @name         Slither.io Bot Championship Edition
 // @namespace    https://github.com/oksenyah/Slither.io-bot
-// @version      3.0.6.2
+// @version      3.0.6.3
 // @description  Slither.io Bot Championship Edition
 // @author       Ok Senyah
 // @match        http://slither.io/
@@ -1462,7 +1462,7 @@ var bot = window.bot = (function (window) {
 //                        canvas.circleIntersect(
 //                            canvas.circle(f.xx, f.yy, 2),
 //                            bot.sidecircle_r))
-                            inFrontAngle(point)
+                            bot.inFrontAngle(point)
                             ) {
                             //calculate clustering index.
                             for (var j = 0; j < window.foods.length && window.foods[j] !== null; j++) {

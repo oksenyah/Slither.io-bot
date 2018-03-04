@@ -1459,7 +1459,7 @@ var bot = window.bot = (function (window) {
 
         //Determine if there are any new kills caused by your snake.
          calculateKillCount: function () {
-            console.log(window);
+            console.log(window.snakes);
             for (var i = 0; i < window.preys.length && window.preys[i] !== null; i++) {
                 var prey = window.preys[i];
                 if (prey.eaten_by.id === bot.id) {

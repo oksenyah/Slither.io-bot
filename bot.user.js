@@ -8,7 +8,7 @@ The MIT License (MIT)
 // ==UserScript==
 // @name         Slither.io Bot Championship Edition
 // @namespace    https://github.com/oksenyah/Slither.io-bot
-// @version      3.0.6.5
+// @version      3.0.6.6
 // @description  Slither.io Bot Championship Edition
 // @author       Ok Senyah
 // @match        http://slither.io/
@@ -677,15 +677,14 @@ var bot = window.bot = (function (window) {
                     };
                 } else {
                     bot.foodAngles[aIndex].sz += Math.round(f.sz);
-                    console.log('Food\'s original score: ' + bot.foodAngles[aIndex].score);
+//                    console.log('Food\'s original score: ' + bot.foodAngles[aIndex].score);
                     bot.foodAngles[aIndex].score += (Math.pow(f.sz, 2) / f.distance / f.totalClusterDistance);
                     console.log('Total Cluster Distance of Food: ' + f.totalClusterDistance);
-                    console.log('[Best] Original score to add: ' + (Math.pow(f.sz, 2) / f.distance));
-                    console.log('[Worst] New score to add (v1): ' + ((Math.pow(f.sz, 2) / f.distance) - f.totalClusterDistance));
-                    console.log('[Unrated] New score to add (v2): ' + ((Math.pow(f.sz, 2) - f.totalClusterDistance) / f.distance));
-                    console.log('[Unrated] New score to add (v3): ' + ((Math.pow(f.sz - f.totalClusterDistance, 2)) / f.distance));
-                    console.log('[Unrated] New score to add (v4): ' + (Math.pow(f.sz, 2) / f.distance / f.totalClusterDistance));
-                    console.log('[Unrated] New score to add (v4): ' + (Math.pow(f.sz, 2) / f.distance / f.totalClusterDistance));
+//                    console.log('[Best] Original score to add: ' + (Math.pow(f.sz, 2) / f.distance));
+//                    console.log('[Worst] New score to add (v1): ' + ((Math.pow(f.sz, 2) / f.distance) - f.totalClusterDistance));
+//                    console.log('[Small Negative Number] New score to add (v2): ' + ((Math.pow(f.sz, 2) - f.totalClusterDistance) / f.distance));
+//                    console.log('[Large Positive Number] New score to add (v3): ' + ((Math.pow(f.sz - f.totalClusterDistance, 2)) / f.distance));
+//                    console.log('[TRYING] New score to add (v4): ' + (Math.pow(f.sz, 2) / f.distance / f.totalClusterDistance));
                     if (bot.foodAngles[aIndex].distance > f.distance) {
                         bot.foodAngles[aIndex].x = Math.round(f.xx);
                         bot.foodAngles[aIndex].y = Math.round(f.yy);
@@ -1461,7 +1460,7 @@ var bot = window.bot = (function (window) {
                         var clusterFood = window.foods[j];
                         f.totalClusterDistance += Math.sqrt(Math.pow(f.xx - clusterFood.xx, 2) + Math.pow(f.yy - clusterFood.yy, 2));
                     }
-                    console.log(f);
+//                    console.log(f);
                     bot.addFoodAngle(f);
                 }
             }

@@ -1487,16 +1487,20 @@ var bot = window.bot = (function (window) {
                                     f.clusterRatio = (numberOfFoodsInRadius / totalClusterDistance);
                                 }
                             }
-//                            console.log('Number of foods in radius: ' + numberOfFoodsInRadius);
-//                            console.log('Total cluster distance: ' + totalClusterDistance);
-//                            console.log(f);
+
                             if (f.clusterRatio > 0.8) {
                                 f.isDense = true;
+                                console.log('Number of foods in radius: ' + numberOfFoodsInRadius);
+                                console.log('Total cluster distance: ' + totalClusterDistance);
+                                console.log(f);
                             } else {
                                 f.isDense = false;
                             }
                             if (f.clusterRatio <= 0.02 && f.clusterRatio > 0.01) {
                                 f.isSparse = true;
+                                console.log('Number of foods in radius: ' + numberOfFoodsInRadius);
+                                console.log('Total cluster distance: ' + totalClusterDistance);
+                                console.log(f);
                             } else {
                                 f.isSparse = false;
                             }

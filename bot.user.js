@@ -441,7 +441,7 @@ var bot = window.bot = (function (window) {
             // direction for followCircle: +1 for counter clockwise and -1 for clockwise
             followCircleDirection: +1,
             //radius of cluster distance to calculate for food.
-            foodClusterRadius: 100
+            foodClusterRadius: 50
         },
         MID_X: 0,
         MID_Y: 0,
@@ -1460,7 +1460,7 @@ var bot = window.bot = (function (window) {
 
             for (var i = 0; i < window.foods.length && window.foods[i] !== null; i++) {
                 var f = window.foods[i];
-                f.clusterRatio = 1; // Initialize cluster ratio to 1.
+                f.clusterRatio = 0.001; // Initialize cluster ratio to .001.
                 var totalClusterDistance = 0;
                 var numberOfFoodsInRadius = 0;
 

@@ -2137,7 +2137,7 @@ var userInterface = window.userInterface = (function (window, document) {
     // Load preferences
     userInterface.loadPreference('logDebugging', false);
     userInterface.loadPreference('visualDebugging', true);
-    userInterface.loadPreference('autoRespawn', false);
+    userInterface.loadPreference('autoRespawn', true);
     userInterface.loadPreference('mobileRender', false);
     window.nick.value = userInterface.loadPreference('savedNick', 'Slither.io-bot');
 

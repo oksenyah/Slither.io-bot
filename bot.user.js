@@ -1466,7 +1466,7 @@ var bot = window.bot = (function (window) {
                 var prey = window.preys[i];
                 console.log('Prey:');
                 console.log(prey);
-                if (prey.eaten_by.id === bot.id) {
+                if (prey.eaten === true && prey.eaten_by.id === bot.id) {
                     if (bot.kills.indexOf(prey.id) < 0) {
                         console.log('Adding kill to tally for prey with ID: ' + prey.id);
                         bot.kills.add(prey);

@@ -8,7 +8,7 @@ The MIT License (MIT)
 // ==UserScript==
 // @name         Slither.io Bot Championship Edition
 // @namespace    https://github.com/oksenyah/Slither.io-bot
-// @version      3.0.6.3
+// @version      3.0.6.4
 // @description  Slither.io Bot Championship Edition
 // @author       Ok Senyah
 // @match        http://slither.io/
@@ -1450,19 +1450,16 @@ var bot = window.bot = (function (window) {
                 f.clusterRatio = 1; // Initialize cluster ratio to 1.
                 var totalClusterDistance = 0;
                 var numberOfFoodsInRadius = 0;
-                var point = {
-                    x: f.xx,
-                    y: f.yy
-                };
+
                 if (!f.eaten &&
-//                    !(
-//                        canvas.circleIntersect(
-//                            canvas.circle(f.xx, f.yy, 2),
-//                            bot.sidecircle_l) ||
-//                        canvas.circleIntersect(
-//                            canvas.circle(f.xx, f.yy, 2),
-//                            bot.sidecircle_r))
-                            bot.inFrontAngle(point)
+                    !(
+                        canvas.circleIntersect(
+                            canvas.circle(f.xx, f.yy, 2),
+                            bot.sidecircle_l) ||
+                        canvas.circleIntersect(
+                            canvas.circle(f.xx, f.yy, 2),
+                            bot.sidecircle_r))
+
                             ) {
                             //calculate clustering index.
                             for (var j = 0; j < window.foods.length && window.foods[j] !== null; j++) {
@@ -1477,7 +1474,7 @@ var bot = window.bot = (function (window) {
                                     f.clusterRatio = 1 - (numberOfFoodsInRadius / totalClusterDistance);
                                 }
                             }
-        //                    console.log(f);
+                            console.log(f);
                             bot.addFoodAngle(f);
                 }
             }

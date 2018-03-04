@@ -441,7 +441,7 @@ var bot = window.bot = (function (window) {
             // direction for followCircle: +1 for counter clockwise and -1 for clockwise
             followCircleDirection: +1,
             //radius of cluster distance to calculate for food.
-            foodClusterRadius: 50
+            foodClusterRadius: 100
         },
         MID_X: 0,
         MID_Y: 0,

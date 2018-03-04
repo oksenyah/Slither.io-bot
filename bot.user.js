@@ -398,6 +398,7 @@ var canvas = window.canvas = (function (window) {
 
 var bot = window.bot = (function (window) {
     return {
+        id: 0,
         isBotRunning: false,
         isBotEnabled: true,
         isSelfCirclingEnabled: false,
@@ -406,6 +407,7 @@ var bot = window.bot = (function (window) {
         collisionAngles: [],
         foodAngles: [],
         scores: [],
+        kills: [],
         foodTimeout: undefined,
         sectorBoxSide: 0,
         defaultAccel: 0,
@@ -1455,11 +1457,27 @@ var bot = window.bot = (function (window) {
             return a.distance - b.distance;
         },
 
+        //Determine if there are any new kills caused by your snake.
+         calculateKillCount: function () {
+            console.log(window);
+            for (var i = 0; i < window.preys.length && window.preys[i] !== null; i++) {
+                var prey = window.preys[i];
+                if (prey.eaten_by.id === bot.id) {
+                    if (bot.kills.indexOf(prey.id) < 0) {
+                        console.log('Adding kill to tally for prey with ID: ' + prey.id);
+                        bot.kills.add(prey);
+                    }
+                }
+            }
+         },
+
+         //Get the snake ID of the current bot.
+         getBotSnakeId: function () {
+
+         },
+
         computeFoodGoal: function () {
             bot.foodAngles = [];
-
-            console.log('PREYS:');
-            console.log(window.preys);
 
             for (var i = 0; i < window.foods.length && window.foods[i] !== null; i++) {
                 var f = window.foods[i];
@@ -1669,6 +1687,7 @@ var bot = window.bot = (function (window) {
         // Timer version of food check
         actionTimer: function () {
             if (window.playing && window.snake !== null && window.snake.alive_amt === 1) {
+                bot.calculateKillCount();
                 if (bot.stage === 'grow') {
                     bot.computeFoodGoal();
                     window.goalCoordinates = bot.currentFood;

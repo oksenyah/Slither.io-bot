@@ -679,15 +679,27 @@ var bot = window.bot = (function (window) {
                     };
                 } else {
                     bot.foodAngles[aIndex].sz += Math.round(f.sz);
-                    console.log('Food\'s original score: ' + bot.foodAngles[aIndex].score);
+                    if (f.isSparse || f.isDense) {
+                        console.log('Food\'s original score: ' + bot.foodAngles[aIndex].score);
+                    }
+
                     bot.foodAngles[aIndex].score += (Math.pow(f.sz, 2) / f.distance * f.clusterRatio);
-                    console.log('Total Cluster Ratio of Food: ' + f.clusterRatio);
-                    console.log('[Best] Original score to add: ' + (Math.pow(f.sz, 2) / f.distance));
-//                    console.log('[Worst] New score to add (v1): ' + ((Math.pow(f.sz, 2) / f.distance) - f.clusterRatio));
-//                    console.log('[Small Negative Number] New score to add (v2): ' + ((Math.pow(f.sz, 2) - f.clusterRatio) / f.distance));
-//                    console.log('[Large Positive Number] New score to add (v3): ' + ((Math.pow(f.sz - f.clusterRatio, 2)) / f.distance));
-//                    console.log('[TRYING] New score to add (v4): ' + (Math.pow(f.sz, 2) / f.distance / f.clusterRatio));
-                    console.log('[TRYING] New score to add (v5): ' + (Math.pow(f.sz, 2) / f.distance * f.clusterRatio));
+                    if (f.isSparse) {
+                        console.log('Food is SPARSE.');
+                    }
+                    if (f.isDense) {
+                        console.log('Food is DENSE.');
+                    }
+                    if (f.isDense || f.isSparse) {
+                        console.log('Total Cluster Ratio of Food: ' + f.clusterRatio);
+                        console.log('[Best] Original score to add: ' + (Math.pow(f.sz, 2) / f.distance));
+    //                    console.log('[Worst] New score to add (v1): ' + ((Math.pow(f.sz, 2) / f.distance) - f.clusterRatio));
+    //                    console.log('[Small Negative Number] New score to add (v2): ' + ((Math.pow(f.sz, 2) - f.clusterRatio) / f.distance));
+    //                    console.log('[Large Positive Number] New score to add (v3): ' + ((Math.pow(f.sz - f.clusterRatio, 2)) / f.distance));
+    //                    console.log('[TRYING] New score to add (v4): ' + (Math.pow(f.sz, 2) / f.distance / f.clusterRatio));
+                        console.log('[TRYING] New score to add (v5): ' + (Math.pow(f.sz, 2) / f.distance * f.clusterRatio));
+                    }
+
                     if (bot.foodAngles[aIndex].distance > f.distance) {
                         bot.foodAngles[aIndex].x = Math.round(f.xx);
                         bot.foodAngles[aIndex].y = Math.round(f.yy);
@@ -1478,6 +1490,17 @@ var bot = window.bot = (function (window) {
 //                            console.log('Number of foods in radius: ' + numberOfFoodsInRadius);
 //                            console.log('Total cluster distance: ' + totalClusterDistance);
 //                            console.log(f);
+                            if (f.clusterRatio > 100) {
+                                f.isDense = true;
+                            } else {
+                                f.isDense = false;
+                            }
+                            if (f.clusterRatio <= 1) {
+                                f.isSparse = true;
+                            } else {
+                                f.isSparse = false;
+                            }
+
                             bot.addFoodAngle(f);
                 }
             }

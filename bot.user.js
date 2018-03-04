@@ -1461,6 +1461,9 @@ var bot = window.bot = (function (window) {
          calculateKillCount: function () {
             for (var i = 0; i < window.preys.length && window.preys[i] !== null; i++) {
                 var prey = window.preys[i];
+                console.log('Prey:');
+                console.log(prey);
+                console.log('Current Bot ID: ' + bot.id);
                 if (prey.eaten === true && prey.eaten_by.id === bot.id) {
                     if (bot.kills.indexOf(prey.id) < 0) {
                         console.log('Adding kill to tally for prey with ID: ' + prey.id);

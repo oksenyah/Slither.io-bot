@@ -1473,8 +1473,6 @@ var bot = window.bot = (function (window) {
 
          //Set the snake ID of the current bot. Should only be called once.
          setBotSnakeId: function () {
-            console.log('Snakes:');
-            console.log(window.snakes);
             if (bot.id === 0) {
                 var id = window.snakes[0].id;
                 console.log('Setting bot snake ID to: ' + id);

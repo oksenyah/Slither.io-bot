@@ -8,7 +8,7 @@ The MIT License (MIT)
 // ==UserScript==
 // @name         Slither.io Bot Championship Edition
 // @namespace    https://github.com/oksenyah/Slither.io-bot
-// @version      3.0.6.8
+// @version      3.0.6.9
 // @description  Slither.io Bot Championship Edition
 // @author       Ok Senyah
 // @match        http://slither.io/
@@ -441,7 +441,7 @@ var bot = window.bot = (function (window) {
             // direction for followCircle: +1 for counter clockwise and -1 for clockwise
             followCircleDirection: +1,
             //radius of cluster distance to calculate for food.
-            foodClusterRadius: 250
+            foodClusterRadius: 50
         },
         MID_X: 0,
         MID_Y: 0,

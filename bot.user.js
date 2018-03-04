@@ -8,7 +8,7 @@ The MIT License (MIT)
 // ==UserScript==
 // @name         Slither.io Bot Championship Edition
 // @namespace    https://github.com/oksenyah/Slither.io-bot
-// @version      3.0.6.1
+// @version      3.0.6.2
 // @description  Slither.io Bot Championship Edition
 // @author       Ok Senyah
 // @match        http://slither.io/
@@ -1590,7 +1590,7 @@ var bot = window.bot = (function (window) {
                 window.snake.lnp.yy -
                 ((window.snake.lnp.xx + bot.cos * (bot.opt.radiusMult / 2)) -
                     window.snake.lnp.xx),
-                (bot.opt.radiusMult / 2) * bot.speedMult
+                (bot.opt.radiusMult / 2 * bot.snakeRadius)
             );
 
 

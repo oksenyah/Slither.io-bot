@@ -1070,7 +1070,8 @@ var SlitherBot = window.bot = (function (window) {
 
         computeFoodGoal: function () {
             SlitherBot.foodAngles = [];
-
+            window.log('Snakes:');
+            window.log(window.snakes);
             for (var i = 0; i < window.foods.length && window.foods[i] !== null; i++) {
                 var f = window.foods[i];
                 f.clusterRatio = 0.001; // Initialize cluster ratio to .001.

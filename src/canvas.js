@@ -183,7 +183,7 @@ var Canvas = window.canvas = (function (window) {
             context.save();
             context.globalAlpha = alpha;
             context.strokeStyle = color;
-            context.arc(arc.x, arc.y, arc.r * window.gsc, arc.a, arc.b);
+            context.arc(arc.x, arc.y, arc.radius * window.gsc, arc.a, arc.b);
             context.stroke();
             if (fill) {
                 context.fillStyle = color;

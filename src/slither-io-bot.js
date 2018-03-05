@@ -23,7 +23,9 @@ var SlitherBot = window.bot = (function (window) {
             // radius multiple for circle intersects
             radiusMult: 10,
             // food cluster ratio to trigger acceleration
-            foodAccelerateClusterRatio: 0.06,
+            foodAccelerateClusterRatio: 0.04,
+            // food size to trigger acceleration
+            foodAccelerateSize: 200,
             // maximum angle of food to trigger acceleration
             foodAccelDa: Math.PI / 2,
             // how many frames per action
@@ -45,7 +47,7 @@ var SlitherBot = window.bot = (function (window) {
             // direction for followCircle: +1 for counter clockwise and -1 for clockwise
             followCircleDirection: +1,
             //radius of cluster distance to calculate for food.
-            foodClusterRadius: 100
+            foodClusterRadius: 150
         },
         MID_X: 0,
         MID_Y: 0,
@@ -1137,7 +1139,8 @@ var SlitherBot = window.bot = (function (window) {
         foodAccel: function () {
             var aIndex = 0;
 
-            if (SlitherBot.currentFood && SlitherBot.currentFood.clusterRatio > SlitherBot.opt.foodAccelerateClusterRatio) {
+            if (SlitherBot.currentFood && SlitherBot.currentFood.clusterRatio > SlitherBot.opt.foodAccelerateClusterRatio
+                || SlitherBot.currentFood.sz > SlitherBot.opt.foodAccelerateSize) {
                 aIndex = SlitherBot.getAngleIndex(SlitherBot.currentFood.ang);
 
                 if (

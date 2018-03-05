@@ -21,13 +21,6 @@ The MIT License (MIT)
 // @grant        none
 // ==/UserScript==
 
-// Custom logging function - disabled by default
-window.log = function () {
-    if (window.logDebugging) {
-        console.log.apply(console, arguments);
-    }
-};
-
 // Main
 (function (window, document) {
     window.play_btn.btnf.addEventListener('click', UserInterface.playButtonClickListener);
@@ -35,6 +28,13 @@ window.log = function () {
     window.onmousedown = UserInterface.onmousedown;
     console.log('Attempting to add window eventListener...');
     window.addEventListener('mouseup', UserInterface.onmouseup);
+
+    // Custom logging function - disabled by default
+    window.log = function () {
+        if (window.logDebugging) {
+            console.log.apply(console, arguments);
+        }
+    };
 
     // Hide top score
     UserInterface.hideTop();

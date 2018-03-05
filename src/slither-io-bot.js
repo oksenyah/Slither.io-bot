@@ -22,6 +22,12 @@ var SlitherBot = window.bot = (function (window) {
             arcSize: Math.PI / 8,
             // radius multiple for circle intersects
             radiusMult: 10,
+            //Weight for food that is closer to snake
+            foodWeightDistance: 1.4,
+            //Weight for food that is clustered
+            foodWeightClusterRatio: 1,
+            //Weight for food that is large
+            foodWeightSize: 1,
             // food cluster ratio to trigger acceleration
             foodAccelerateClusterRatio: 0.04,
             // food size to trigger acceleration
@@ -281,7 +287,7 @@ var SlitherBot = window.bot = (function (window) {
                         da: Math.abs(SlitherBot.angleBetween(ang, window.snake.ehang)),
                         distance: f.distance,
                         sz: f.sz,
-                        score: (Math.pow(f.sz, 2) / f.distance * f.clusterRatio)
+                        score: ((f.sz * SlitherBot.opt.foodWeightSize) * (f.distance * SlitherBot.opt.foodWeightDistance) * (f.clusterRatio * SlitherBot.opt.foodWeightClusterRatio))
                     };
                 } else {
                     SlitherBot.foodAngles[aIndex].sz += Math.round(f.sz);
@@ -289,7 +295,7 @@ var SlitherBot = window.bot = (function (window) {
                         window.log('Food\'s original score: ' + SlitherBot.foodAngles[aIndex].score);
                     }
 
-                    SlitherBot.foodAngles[aIndex].score += (Math.pow(f.sz, 2) / f.distance * f.clusterRatio);
+                    SlitherBot.foodAngles[aIndex].score +=  ((f.sz * SlitherBot.opt.foodWeightSize) * (f.distance * SlitherBot.opt.foodWeightDistance) * (f.clusterRatio * SlitherBot.opt.foodWeightClusterRatio));
                     if (f.isSparse) {
                         window.log('Food is SPARSE.');
                     }
@@ -303,7 +309,7 @@ var SlitherBot = window.bot = (function (window) {
     //                    window.log('[Small Negative Number] New score to add (v2): ' + ((Math.pow(f.sz, 2) - f.clusterRatio) / f.distance));
     //                    window.log('[Large Positive Number] New score to add (v3): ' + ((Math.pow(f.sz - f.clusterRatio, 2)) / f.distance));
     //                    window.log('[TRYING] New score to add (v4): ' + (Math.pow(f.sz, 2) / f.distance / f.clusterRatio));
-                        window.log('[TRYING] New score to add (v5): ' + (Math.pow(f.sz, 2) / f.distance * f.clusterRatio));
+                        window.log('[TRYING] New score to add (v5): ' +  ((f.sz * SlitherBot.opt.foodWeightSize) * (f.distance * SlitherBot.opt.foodWeightDistance) * (f.clusterRatio * SlitherBot.opt.foodWeightClusterRatio)));
                     }
 
                     if (SlitherBot.foodAngles[aIndex].distance > f.distance) {

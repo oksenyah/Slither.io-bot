@@ -28,8 +28,6 @@ var SlitherBot = window.bot = (function (window) {
             foodWeightClusterRatio: 5,
             //Weight for food that is large
             foodWeightSize: 50,
-            // food cluster ratio to trigger acceleration
-            foodAccelerateClusterRatio: 0.025,
             // food size to trigger acceleration
             foodAccelerateSize: 200,
             // maximum angle of food to trigger acceleration
@@ -1145,10 +1143,8 @@ var SlitherBot = window.bot = (function (window) {
         foodAccel: function () {
             var aIndex = 0;
 
-            if (SlitherBot.currentFood && SlitherBot.currentFood.clusterRatio > SlitherBot.opt.foodAccelerateClusterRatio
-                || SlitherBot.currentFood.sz > SlitherBot.opt.foodAccelerateSize) {
+            if (SlitherBot.currentFood.isDense || SlitherBot.currentFood.sz > SlitherBot.opt.foodAccelerateSize) {
                 aIndex = SlitherBot.getAngleIndex(SlitherBot.currentFood.ang);
-
                 if (
                     SlitherBot.collisionAngles[aIndex] && SlitherBot.collisionAngles[aIndex].distance >
                     SlitherBot.currentFood.distance + SlitherBot.snakeRadius * SlitherBot.opt.radiusMult

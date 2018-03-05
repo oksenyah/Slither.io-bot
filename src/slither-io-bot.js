@@ -1235,16 +1235,16 @@ var SlitherBot = window.bot = (function (window) {
             window.log('window.snake:');
             window.log(window.snake);
             SlitherBot.headCircle = canvas.arc(
-                //Snake X coord
+                //Snake X coord 15712.786069922688
                 window.snake.xx,
-                //Snake Y coord
+                //Snake Y coord 21231.5666645047
                 window.snake.yy,
-                //Radius of Arc
-                SlitherBot.opt.radiusMult / 2 * SlitherBot.snakeRadius,
-                //Starting angle
-                window.snake.eang,
-                //Ending angle
-                window.snake.wang
+                //Radius of Arc (10 / 2 * (1.0566037735849056 * 29 / 2)
+                50 / 2 * SlitherBot.snakeRadius,
+                //Starting angle 0.22173166648125028
+                window.snake.eang * Math.PI,
+                //Ending angle 0.2699806186678728
+                window.snake.wang * Math.PI
             );
 
             SlitherBot.sidecircle_r = canvas.circle(

@@ -27,7 +27,7 @@ var SlitherBot = window.bot = (function (window) {
             //Weight for food that is clustered
             foodWeightClusterRatio: 1,
             //Weight for food that is large
-            foodWeightSize: 1,
+            foodWeightSize: 50,
             // food cluster ratio to trigger acceleration
             foodAccelerateClusterRatio: 0.04,
             // food size to trigger acceleration
@@ -287,7 +287,7 @@ var SlitherBot = window.bot = (function (window) {
                         da: Math.abs(SlitherBot.angleBetween(ang, window.snake.ehang)),
                         distance: f.distance,
                         sz: f.sz,
-                        score: ((f.sz * SlitherBot.opt.foodWeightSize) * (f.distance * SlitherBot.opt.foodWeightDistance) * (f.clusterRatio * SlitherBot.opt.foodWeightClusterRatio))
+                        score: ((f.sz * SlitherBot.opt.foodWeightSize) / (f.distance * SlitherBot.opt.foodWeightDistance) * (f.clusterRatio * SlitherBot.opt.foodWeightClusterRatio))
                     };
                 } else {
                     SlitherBot.foodAngles[aIndex].sz += Math.round(f.sz);
@@ -295,7 +295,7 @@ var SlitherBot = window.bot = (function (window) {
                         window.log('Food\'s original score: ' + SlitherBot.foodAngles[aIndex].score);
                     }
 
-                    SlitherBot.foodAngles[aIndex].score +=  ((f.sz * SlitherBot.opt.foodWeightSize) * (f.distance * SlitherBot.opt.foodWeightDistance) * (f.clusterRatio * SlitherBot.opt.foodWeightClusterRatio));
+                    SlitherBot.foodAngles[aIndex].score +=  ((f.sz * SlitherBot.opt.foodWeightSize) / (f.distance * SlitherBot.opt.foodWeightDistance) * (f.clusterRatio * SlitherBot.opt.foodWeightClusterRatio));
                     if (f.isSparse) {
                         window.log('Food is SPARSE.');
                     }

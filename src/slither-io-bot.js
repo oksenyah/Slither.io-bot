@@ -284,24 +284,24 @@ var SlitherBot = window.bot = (function (window) {
                 } else {
                     bot.foodAngles[aIndex].sz += Math.round(f.sz);
                     if (f.isSparse || f.isDense) {
-                        console.log('Food\'s original score: ' + bot.foodAngles[aIndex].score);
+                        window.log('Food\'s original score: ' + bot.foodAngles[aIndex].score);
                     }
 
                     bot.foodAngles[aIndex].score += (Math.pow(f.sz, 2) / f.distance * f.clusterRatio);
                     if (f.isSparse) {
-                        console.log('Food is SPARSE.');
+                        window.log('Food is SPARSE.');
                     }
                     if (f.isDense) {
-                        console.log('Food is DENSE.');
+                        window.log('Food is DENSE.');
                     }
                     if (f.isDense || f.isSparse) {
-                        console.log('Total Cluster Ratio of Food: ' + f.clusterRatio);
-                        console.log('[Best] Original score to add: ' + (Math.pow(f.sz, 2) / f.distance));
-    //                    console.log('[Worst] New score to add (v1): ' + ((Math.pow(f.sz, 2) / f.distance) - f.clusterRatio));
-    //                    console.log('[Small Negative Number] New score to add (v2): ' + ((Math.pow(f.sz, 2) - f.clusterRatio) / f.distance));
-    //                    console.log('[Large Positive Number] New score to add (v3): ' + ((Math.pow(f.sz - f.clusterRatio, 2)) / f.distance));
-    //                    console.log('[TRYING] New score to add (v4): ' + (Math.pow(f.sz, 2) / f.distance / f.clusterRatio));
-                        console.log('[TRYING] New score to add (v5): ' + (Math.pow(f.sz, 2) / f.distance * f.clusterRatio));
+                        window.log('Total Cluster Ratio of Food: ' + f.clusterRatio);
+                        window.log('[Best] Original score to add: ' + (Math.pow(f.sz, 2) / f.distance));
+    //                    window.log('[Worst] New score to add (v1): ' + ((Math.pow(f.sz, 2) / f.distance) - f.clusterRatio));
+    //                    window.log('[Small Negative Number] New score to add (v2): ' + ((Math.pow(f.sz, 2) - f.clusterRatio) / f.distance));
+    //                    window.log('[Large Positive Number] New score to add (v3): ' + ((Math.pow(f.sz - f.clusterRatio, 2)) / f.distance));
+    //                    window.log('[TRYING] New score to add (v4): ' + (Math.pow(f.sz, 2) / f.distance / f.clusterRatio));
+                        window.log('[TRYING] New score to add (v5): ' + (Math.pow(f.sz, 2) / f.distance * f.clusterRatio));
                     }
 
                     if (bot.foodAngles[aIndex].distance > f.distance) {
@@ -1063,7 +1063,7 @@ var SlitherBot = window.bot = (function (window) {
         setBotSnakeId: function () {
             if (bot.id === 0) {
                 var id = window.snakes[0].id;
-                console.log('Setting bot snake ID to: ' + id);
+                window.log('Setting bot snake ID to: ' + id);
                 bot.id = id;
             }
          },
@@ -1103,17 +1103,17 @@ var SlitherBot = window.bot = (function (window) {
 
                             if (f.clusterRatio > 0.25) {
                                 f.isDense = true;
-                                console.log('Number of foods in radius: ' + numberOfFoodsInRadius);
-                                console.log('Total cluster distance: ' + totalClusterDistance);
-                                console.log(f);
+                                window.log('Number of foods in radius: ' + numberOfFoodsInRadius);
+                                window.log('Total cluster distance: ' + totalClusterDistance);
+                                window.log(f);
                             } else {
                                 f.isDense = false;
                             }
                             if (f.clusterRatio <= 0.01 && f.clusterRatio > 0.001) {
                                 f.isSparse = true;
-                                console.log('Number of foods in radius: ' + numberOfFoodsInRadius);
-                                console.log('Total cluster distance: ' + totalClusterDistance);
-                                console.log(f);
+                                window.log('Number of foods in radius: ' + numberOfFoodsInRadius);
+                                window.log('Total cluster distance: ' + totalClusterDistance);
+                                window.log(f);
                             } else {
                                 f.isSparse = false;
                             }

@@ -240,19 +240,19 @@ var UserInterface = window.userInterface = (function (window, document) {
                 // Letter 'U' to toggle debugging (console)
                 if (e.keyCode === 85) {
                     window.logDebugging = !window.logDebugging;
-                    console.log('Log debugging set to: ' + window.logDebugging);
+                    window.log('Log debugging set to: ' + window.logDebugging);
                     userInterface.savePreference('logDebugging', window.logDebugging);
                 }
                 // Letter 'Y' to toggle debugging (visual)
                 if (e.keyCode === 89) {
                     window.visualDebugging = !window.visualDebugging;
-                    console.log('Visual debugging set to: ' + window.visualDebugging);
+                    window.log('Visual debugging set to: ' + window.visualDebugging);
                     userInterface.savePreference('visualDebugging', window.visualDebugging);
                 }
                 // Letter 'I' to toggle autorespawn
                 if (e.keyCode === 73) {
                     window.autoRespawn = !window.autoRespawn;
-                    console.log('Automatic Respawning set to: ' + window.autoRespawn);
+                    window.log('Automatic Respawning set to: ' + window.autoRespawn);
                     userInterface.savePreference('autoRespawn', window.autoRespawn);
                 }
                 // Letter 'H' to toggle hidden mode
@@ -270,14 +270,14 @@ var UserInterface = window.userInterface = (function (window, document) {
                 // Letter 'A' to increase collision detection radius
                 if (e.keyCode === 65) {
                     SlitherBot.opt.radiusMult++;
-                    console.log(
+                    window.log(
                         'radiusMult set to: ' + SlitherBot.opt.radiusMult);
                 }
                 // Letter 'S' to decrease collision detection radius
                 if (e.keyCode === 83) {
                     if (SlitherBot.opt.radiusMult > 1) {
                         SlitherBot.opt.radiusMult--;
-                        console.log(
+                        window.log(
                             'radiusMult set to: ' +
                             SlitherBot.opt.radiusMult);
                     }

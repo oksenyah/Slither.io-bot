@@ -332,6 +332,8 @@ var SlitherBot = window.bot = (function (window) {
             SlitherBot.collisionPoints = [];
             SlitherBot.collisionAngles = [];
 
+            window.log('Head Circle:');
+            window.log(SlitherBot.headCircle);
 
             for (var snake = 0, ls = window.snakes.length; snake < ls; snake++) {
                 scPoint = undefined;

@@ -25,7 +25,7 @@ var SlitherBot = window.bot = (function (window) {
             //Weight for food that is closer to snake
             foodWeightDistance: 0.5,
             //Weight for food that is clustered
-            foodWeightClusterRatio: 1,
+            foodWeightClusterRatio: 5,
             //Weight for food that is large
             foodWeightSize: 50,
             // food cluster ratio to trigger acceleration
@@ -1109,7 +1109,7 @@ var SlitherBot = window.bot = (function (window) {
                                 }
                             }
 
-                            if (f.clusterRatio > 0.25) {
+                            if (f.clusterRatio > 0.18) {
                                 f.isDense = true;
                                 window.log('Number of foods in radius: ' + numberOfFoodsInRadius);
                                 window.log('Total cluster distance: ' + totalClusterDistance);
@@ -1117,7 +1117,7 @@ var SlitherBot = window.bot = (function (window) {
                             } else {
                                 f.isDense = false;
                             }
-                            if (f.clusterRatio <= 0.01 && f.clusterRatio > 0.001) {
+                            if (f.clusterRatio <= 0.006 && f.clusterRatio > 0.001) {
                                 f.isSparse = true;
                                 window.log('Number of foods in radius: ' + numberOfFoodsInRadius);
                                 window.log('Total cluster distance: ' + totalClusterDistance);

@@ -29,7 +29,7 @@ var SlitherBot = window.bot = (function (window) {
             //Weight for food that is large
             foodWeightSize: 50,
             // food cluster ratio to trigger acceleration
-            foodAccelerateClusterRatio: 0.04,
+            foodAccelerateClusterRatio: 0.025,
             // food size to trigger acceleration
             foodAccelerateSize: 200,
             // maximum angle of food to trigger acceleration
@@ -53,7 +53,7 @@ var SlitherBot = window.bot = (function (window) {
             // direction for followCircle: +1 for counter clockwise and -1 for clockwise
             followCircleDirection: +1,
             //radius of cluster distance to calculate for food.
-            foodClusterRadius: 150
+            foodClusterRadius: 100
         },
         MID_X: 0,
         MID_Y: 0,

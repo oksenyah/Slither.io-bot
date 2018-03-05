@@ -1240,7 +1240,7 @@ var SlitherBot = window.bot = (function (window) {
                 //Snake Y coord 21231.5666645047
                 window.snake.yy,
                 //Radius of Arc (10 / 2 * (1.0566037735849056 * 29 / 2)
-                50 / 2 * SlitherBot.snakeRadius,
+                SlitherBot.opt.radiusMult / 2 * SlitherBot.snakeRadius,
                 //Starting angle 0.22173166648125028
                 window.snake.eang * Math.PI,
                 //Ending angle 0.2699806186678728

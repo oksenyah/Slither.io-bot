@@ -1,4 +1,4 @@
-var canvas = window.canvas = (function (window) {
+var Canvas = window.canvas = (function (window) {
     return {
         // Spoofs moving the mouse to the provided coordinates.
         setMouseCoordinates: function (point) {

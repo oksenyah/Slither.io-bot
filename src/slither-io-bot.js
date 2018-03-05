@@ -52,7 +52,7 @@ var SlitherBot = window.bot = (function (window) {
             followCircleLength: 5000,
             // direction for followCircle: +1 for counter clockwise and -1 for clockwise
             followCircleDirection: +1,
-            //radius of cluster distance to calculate for food.
+            //radius of cluster distance to calculate for food. WARNING: too high can cause performance issues.
             foodClusterRadius: 100
         },
         MID_X: 0,

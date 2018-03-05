@@ -1,4 +1,4 @@
-var Canvas = window.canvas = (function (window) {
+var canvas = window.canvas = (function (window) {
     return {
         // Spoofs moving the mouse to the provided coordinates.
         setMouseCoordinates: function (point) {
@@ -25,11 +25,11 @@ var Canvas = window.canvas = (function (window) {
         // Map to Canvas coordinate conversion for drawing circles.
         // Radius also needs to scale by .gsc
         circleMapToCanvas: function (circle) {
-            var newCircle = mapToCanvas({
+            var newCircle = canvas.mapToCanvas({
                 x: circle.x,
                 y: circle.y
             });
-            return circle(
+            return canvas.circle(
                 newCircle.x,
                 newCircle.y,
                 circle.radius * window.gsc
@@ -125,7 +125,7 @@ var Canvas = window.canvas = (function (window) {
             if (alpha === undefined) alpha = 1;
 
             var context = window.mc.getContext('2d');
-            var lc = mapToCanvas({ x: rect.x, y: rect.y });
+            var lc = canvas.mapToCanvas({ x: rect.x, y: rect.y });
 
             context.save();
             context.globalAlpha = alpha;
@@ -145,7 +145,7 @@ var Canvas = window.canvas = (function (window) {
             if (circle.radius === undefined) circle.radius = 5;
 
             var context = window.mc.getContext('2d');
-            var drawCircle = circleMapToCanvas(circle);
+            var drawCircle = canvas.circleMapToCanvas(circle);
 
             context.save();
             context.globalAlpha = alpha;
@@ -189,8 +189,8 @@ var Canvas = window.canvas = (function (window) {
             if (width === undefined) width = 5;
 
             var context = window.mc.getContext('2d');
-            var dp1 = mapToCanvas(p1);
-            var dp2 = mapToCanvas(p2);
+            var dp1 = canvas.mapToCanvas(p1);
+            var dp2 = canvas.mapToCanvas(p2);
 
             context.save();
             context.beginPath();
@@ -216,7 +216,7 @@ var Canvas = window.canvas = (function (window) {
         },
 
         getDistance2FromSnake: function (point) {
-            point.distance = getDistance2(window.snake.xx, window.snake.yy,
+            point.distance = canvas.getDistance2(window.snake.xx, window.snake.yy,
                 point.xx, point.yy);
             return point;
         },
@@ -301,11 +301,11 @@ var Canvas = window.canvas = (function (window) {
         },
 
         convexHull: function (points) {
-            points.sort(convexHullSort);
+            points.sort(canvas.convexHullSort);
 
             var lower = [];
             for (let i = 0, l = points.length; i < l; i++) {
-                while (lower.length >= 2 && cross(
+                while (lower.length >= 2 && canvas.cross(
                     lower[lower.length - 2], lower[lower.length - 1], points[i]) <= 0) {
                     lower.pop();
                 }
@@ -314,7 +314,7 @@ var Canvas = window.canvas = (function (window) {
 
             var upper = [];
             for (let i = points.length - 1; i >= 0; i--) {
-                while (upper.length >= 2 && cross(
+                while (upper.length >= 2 && canvas.cross(
                     upper[upper.length - 2], upper[upper.length - 1], points[i]) <= 0) {
                     upper.pop();
                 }
@@ -338,7 +338,7 @@ var Canvas = window.canvas = (function (window) {
                 circle1.x < circle2.x + bothRadii &&
                 circle1.y < circle2.y + bothRadii) {
 
-                var distance2 = getDistance2(circle1.x, circle1.y, circle2.x, circle2.y);
+                var distance2 = canvas.getDistance2(circle1.x, circle1.y, circle2.x, circle2.y);
 
                 if (distance2 < bothRadii * bothRadii) {
                     point = {
@@ -349,17 +349,17 @@ var Canvas = window.canvas = (function (window) {
                         ang: 0.0
                     };
 
-                    point.ang = fastAtan2(
+                    point.ang = canvas.fastAtan2(
                         point.y - window.snake.yy, point.x - window.snake.xx);
 
                     if (window.visualDebugging) {
-                        var collisionPointCircle = circle(
+                        var collisionPointCircle = canvas.circle(
                             point.x,
                             point.y,
                             5
                         );
-                        drawCircle(circle2, '#ff9900', false);
-                        drawCircle(collisionPointCircle, '#66ff66', true);
+                        canvas.drawCircle(circle2, '#ff9900', false);
+                        canvas.drawCircle(collisionPointCircle, '#66ff66', true);
                     }
                     return point;
                 }

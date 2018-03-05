@@ -244,17 +244,17 @@ var SlitherBot = window.bot = (function (window) {
 
         // Add to collisionAngles if distance is closer
         addCollisionAngle: function (sp) {
-            window.log('SP:');
-            window.log(sp);
+//            window.log('SP:');
+//            window.log(sp);
             var ang = canvas.fastAtan2(
                 Math.round(sp.yy - window.snake.yy),
                 Math.round(sp.xx - window.snake.xx));
-                window.log('Angle: ' + ang);
+//                window.log('Angle: ' + ang);
             var angleIndex = SlitherBot.getAngleIndex(ang);
-                window.log('Angle Index: ' + angleIndex);
+//                window.log('Angle Index: ' + angleIndex);
             var actualDistance = Math.round(Math.pow(
                 Math.sqrt(sp.distance) - sp.radius, 2));
-                window.log('Actual Distance: ' + actualDistance);
+//                window.log('Actual Distance: ' + actualDistance);
 
             if (SlitherBot.collisionAngles[angleIndex] === undefined ||
                  SlitherBot.collisionAngles[angleIndex].distance > sp.distance) {
@@ -1242,9 +1242,9 @@ var SlitherBot = window.bot = (function (window) {
                 //Radius of Arc
                 SlitherBot.opt.radiusMult / 2 * SlitherBot.snakeRadius,
                 //Starting angle
-                angleIndex - window.snake.eang,
+                window.snake.eang,
                 //Ending angle
-                angleIndex + window.snake.wang
+                window.snake.wang
             );
 
             SlitherBot.sidecircle_r = canvas.circle(

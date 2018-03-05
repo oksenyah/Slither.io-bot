@@ -23,7 +23,7 @@ var SlitherBot = window.bot = (function (window) {
             // radius multiple for circle intersects
             radiusMult: 10,
             //Weight for food that is closer to snake
-            foodWeightDistance: 5,
+            foodWeightDistance: 0.5,
             //Weight for food that is clustered
             foodWeightClusterRatio: 1,
             //Weight for food that is large

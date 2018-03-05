@@ -22,12 +22,6 @@ var SlitherBot = window.bot = (function (window) {
             arcSize: Math.PI / 8,
             // radius multiple for circle intersects
             radiusMult: 10,
-            //Weight for food that is closer to snake
-            foodWeightDistance: 0.5,
-            //Weight for food that is clustered
-            foodWeightClusterRatio: 5,
-            //Weight for food that is large
-            foodWeightSize: 50,
             // food size to trigger acceleration
             foodAccelerateSize: 200,
             // maximum angle of food to trigger acceleration
@@ -51,7 +45,15 @@ var SlitherBot = window.bot = (function (window) {
             // direction for followCircle: +1 for counter clockwise and -1 for clockwise
             followCircleDirection: +1,
             //radius of cluster distance to calculate for food. WARNING: too high can cause performance issues.
-            foodClusterRadius: 100
+            foodClusterRadius: 100,
+            //weight to increment angle index
+            weightAngleIndex: 2,
+            //Weight for food that is clustered
+            weightFoodClusterRatio: 5,
+            //Weight for food that is closer to snake
+            weightFoodDistance: 0.5,
+            //Weight for food that is large
+            weightFoodSize: 50
         },
         MID_X: 0,
         MID_Y: 0,
@@ -169,7 +171,7 @@ var SlitherBot = window.bot = (function (window) {
                     (best.distance < distance && best.distance !== 0)) {
                     best = {
                         distance: distance,
-                        aIndex: i
+                        angleIndex: i
                     };
                 }
             }
@@ -188,7 +190,7 @@ var SlitherBot = window.bot = (function (window) {
                 SlitherBot.changeHeadingAbs(
                     (openAngles[0].openEnd - openAngles[0].sz / 2) * SlitherBot.opt.arcSize);
             } else {
-                SlitherBot.changeHeadingAbs(best.aIndex * SlitherBot.opt.arcSize);
+                SlitherBot.changeHeadingAbs(best.angleIndex * SlitherBot.opt.arcSize);
             }
         },
 
@@ -229,37 +231,41 @@ var SlitherBot = window.bot = (function (window) {
             var index;
 
             if (angle < 0) {
-                angle += 2 * Math.PI;
+                angle += SlitherBot.opt.weightAngleIndex * Math.PI;
             }
 
             index = Math.round(angle * (1 / SlitherBot.opt.arcSize));
 
             if (index === SlitherBot.MAXARC) {
-                return 0;
+                index = 0;
             }
             return index;
         },
 
         // Add to collisionAngles if distance is closer
         addCollisionAngle: function (sp) {
+            window.log('SP:');
+            window.log(sp);
             var ang = canvas.fastAtan2(
                 Math.round(sp.yy - window.snake.yy),
                 Math.round(sp.xx - window.snake.xx));
-            var aIndex = SlitherBot.getAngleIndex(ang);
-
+                window.log('Angle: ' + ang);
+            var angleIndex = SlitherBot.getAngleIndex(ang);
+                window.log('Angle Index: ' + angleIndex);
             var actualDistance = Math.round(Math.pow(
                 Math.sqrt(sp.distance) - sp.radius, 2));
+                window.log('Actual Distance: ' + actualDistance);
 
-            if (SlitherBot.collisionAngles[aIndex] === undefined ||
-                 SlitherBot.collisionAngles[aIndex].distance > sp.distance) {
-                SlitherBot.collisionAngles[aIndex] = {
+            if (SlitherBot.collisionAngles[angleIndex] === undefined ||
+                 SlitherBot.collisionAngles[angleIndex].distance > sp.distance) {
+                SlitherBot.collisionAngles[angleIndex] = {
                     x: Math.round(sp.xx),
                     y: Math.round(sp.yy),
                     ang: ang,
                     snake: sp.snake,
                     distance: actualDistance,
                     radius: sp.radius,
-                    aIndex: aIndex
+                    angleIndex: angleIndex
                 };
             }
         },
@@ -270,50 +276,50 @@ var SlitherBot = window.bot = (function (window) {
                 Math.round(f.yy - window.snake.yy),
                 Math.round(f.xx - window.snake.xx));
 
-            var aIndex = SlitherBot.getAngleIndex(ang);
+            var angleIndex = SlitherBot.getAngleIndex(ang);
 
             canvas.getDistance2FromSnake(f);
 
-            if (SlitherBot.collisionAngles[aIndex] === undefined ||
-                Math.sqrt(SlitherBot.collisionAngles[aIndex].distance) >
+            if (SlitherBot.collisionAngles[angleIndex] === undefined ||
+                Math.sqrt(SlitherBot.collisionAngles[angleIndex].distance) >
                 Math.sqrt(f.distance) + SlitherBot.snakeRadius * SlitherBot.opt.radiusMult * SlitherBot.speedMult / 2) {
-                if (SlitherBot.foodAngles[aIndex] === undefined) {
-                    SlitherBot.foodAngles[aIndex] = {
+                if (SlitherBot.foodAngles[angleIndex] === undefined) {
+                    SlitherBot.foodAngles[angleIndex] = {
                         x: Math.round(f.xx),
                         y: Math.round(f.yy),
                         ang: ang,
                         da: Math.abs(SlitherBot.angleBetween(ang, window.snake.ehang)),
                         distance: f.distance,
                         sz: f.sz,
-                        score: ((f.sz * SlitherBot.opt.foodWeightSize) / (f.distance * SlitherBot.opt.foodWeightDistance) * (f.clusterRatio * SlitherBot.opt.foodWeightClusterRatio))
+                        score: ((f.sz * SlitherBot.opt.weightFoodSize) / (f.distance * SlitherBot.opt.weightFoodDistance) * (f.clusterRatio * SlitherBot.opt.weightFoodClusterRatio))
                     };
                 } else {
-                    SlitherBot.foodAngles[aIndex].sz += Math.round(f.sz);
-                    if (f.isSparse || f.isDense) {
-                        window.log('Food\'s original score: ' + SlitherBot.foodAngles[aIndex].score);
-                    }
+                    SlitherBot.foodAngles[angleIndex].sz += Math.round(f.sz);
+//                    if (f.isSparse || f.isDense) {
+//                        window.log('Food\'s original score: ' + SlitherBot.foodAngles[angleIndex].score);
+//                    }
 
-                    SlitherBot.foodAngles[aIndex].score +=  ((f.sz * SlitherBot.opt.foodWeightSize) / (f.distance * SlitherBot.opt.foodWeightDistance) * (f.clusterRatio * SlitherBot.opt.foodWeightClusterRatio));
-                    if (f.isSparse) {
-                        window.log('Food is SPARSE.');
-                    }
-                    if (f.isDense) {
-                        window.log('Food is DENSE.');
-                    }
-                    if (f.isDense || f.isSparse) {
-                        window.log('Total Cluster Ratio of Food: ' + f.clusterRatio);
-                        window.log('[Best] Original score to add: ' + (Math.pow(f.sz, 2) / f.distance));
-    //                    window.log('[Worst] New score to add (v1): ' + ((Math.pow(f.sz, 2) / f.distance) - f.clusterRatio));
-    //                    window.log('[Small Negative Number] New score to add (v2): ' + ((Math.pow(f.sz, 2) - f.clusterRatio) / f.distance));
-    //                    window.log('[Large Positive Number] New score to add (v3): ' + ((Math.pow(f.sz - f.clusterRatio, 2)) / f.distance));
-    //                    window.log('[TRYING] New score to add (v4): ' + (Math.pow(f.sz, 2) / f.distance / f.clusterRatio));
-                        window.log('[TRYING] New score to add (v5): ' +  ((f.sz * SlitherBot.opt.foodWeightSize) * (f.distance * SlitherBot.opt.foodWeightDistance) * (f.clusterRatio * SlitherBot.opt.foodWeightClusterRatio)));
-                    }
+                    SlitherBot.foodAngles[angleIndex].score +=  ((f.sz * SlitherBot.opt.weightFoodSize) / (f.distance * SlitherBot.opt.weightFoodDistance) * (f.clusterRatio * SlitherBot.opt.weightFoodClusterRatio));
+//                    if (f.isSparse) {
+//                        window.log('Food is SPARSE.');
+//                    }
+//                    if (f.isDense) {
+//                        window.log('Food is DENSE.');
+//                    }
+//                    if (f.isDense || f.isSparse) {
+//                        window.log('Total Cluster Ratio of Food: ' + f.clusterRatio);
+//                        window.log('[Best] Original score to add: ' + (Math.pow(f.sz, 2) / f.distance));
+//    //                    window.log('[Worst] New score to add (v1): ' + ((Math.pow(f.sz, 2) / f.distance) - f.clusterRatio));
+//    //                    window.log('[Small Negative Number] New score to add (v2): ' + ((Math.pow(f.sz, 2) - f.clusterRatio) / f.distance));
+//    //                    window.log('[Large Positive Number] New score to add (v3): ' + ((Math.pow(f.sz - f.clusterRatio, 2)) / f.distance));
+//    //                    window.log('[TRYING] New score to add (v4): ' + (Math.pow(f.sz, 2) / f.distance / f.clusterRatio));
+//                        window.log('[TRYING] New score to add (v5): ' +  ((f.sz * SlitherBot.opt.weightFoodSize) * (f.distance * SlitherBot.opt.weightFoodDistance) * (f.clusterRatio * SlitherBot.opt.weightFoodClusterRatio)));
+//                    }
 
-                    if (SlitherBot.foodAngles[aIndex].distance > f.distance) {
-                        SlitherBot.foodAngles[aIndex].x = Math.round(f.xx);
-                        SlitherBot.foodAngles[aIndex].y = Math.round(f.yy);
-                        SlitherBot.foodAngles[aIndex].distance = f.distance;
+                    if (SlitherBot.foodAngles[angleIndex].distance > f.distance) {
+                        SlitherBot.foodAngles[angleIndex].x = Math.round(f.xx);
+                        SlitherBot.foodAngles[angleIndex].y = Math.round(f.yy);
+                        SlitherBot.foodAngles[angleIndex].distance = f.distance;
                     }
                 }
             }
@@ -1141,18 +1147,18 @@ var SlitherBot = window.bot = (function (window) {
         },
 
         foodAccel: function () {
-            var aIndex = 0;
+            var angleIndex = 0;
 
             if (SlitherBot.currentFood.isDense || SlitherBot.currentFood.sz > SlitherBot.opt.foodAccelerateSize) {
-                aIndex = SlitherBot.getAngleIndex(SlitherBot.currentFood.ang);
+                angleIndex = SlitherBot.getAngleIndex(SlitherBot.currentFood.ang);
                 if (
-                    SlitherBot.collisionAngles[aIndex] && SlitherBot.collisionAngles[aIndex].distance >
+                    SlitherBot.collisionAngles[angleIndex] && SlitherBot.collisionAngles[angleIndex].distance >
                     SlitherBot.currentFood.distance + SlitherBot.snakeRadius * SlitherBot.opt.radiusMult
                     && SlitherBot.currentFood.da < SlitherBot.opt.foodAccelDa) {
                     return 1;
                 }
 
-                if (SlitherBot.collisionAngles[aIndex] === undefined
+                if (SlitherBot.collisionAngles[angleIndex] === undefined
                     && SlitherBot.currentFood.da < SlitherBot.opt.foodAccelDa) {
                     return 1;
                 }

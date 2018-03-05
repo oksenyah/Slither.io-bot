@@ -70,13 +70,13 @@ var Canvas = window.canvas = (function (window) {
         },
 
         // Constructor for arc type
-        arc: function (a, b, r, x, y) {
+        arc: function (x, y, radius, a, b) {
             var a = {
-                x: Math.round(a),
-                y: Math.round(b),
-                r: Math.round(r),
-                a: Math.round(x),
-                b: Math.round(y)
+                x: Math.round(x),
+                y: Math.round(y),
+                radius: Math.round(radius),
+                a: Math.round(a),
+                b: Math.round(b)
             };
 
             return a;

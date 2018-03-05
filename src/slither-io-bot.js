@@ -33,7 +33,7 @@ var SlitherBot = window.bot = (function (window) {
             // base speed
             speedBase: 5.78,
             // front angle size
-            frontAngle: Math.PI / 2,
+            frontAngle: Math.PI * 0.75,
             // percent of angles covered by same snake to be considered an encircle attempt
             enCircleThreshold: 0.5625,
             // percent of angles covered by all snakes to move to safety

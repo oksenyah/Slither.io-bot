@@ -61,9 +61,9 @@ var SlitherBot = window.bot = (function (window) {
             window.dead_mtm = 0;
             window.login_fr = 0;
 
-            bot.isBotRunning = false;
+            isBotRunning = false;
             window.forcing = true;
-            bot.connect();
+            connect();
             window.forcing = false;
         },
 
@@ -93,9 +93,9 @@ var SlitherBot = window.bot = (function (window) {
 
             window.goalCoordinates = {
                 x: Math.round(
-                    window.snake.xx + (bot.headCircle.radius) * cos),
+                    window.snake.xx + (headCircle.radius) * cos),
                 y: Math.round(
-                    window.snake.yy + (bot.headCircle.radius) * sin)
+                    window.snake.yy + (headCircle.radius) * sin)
             };
 
             /*if (window.visualDebugging) {
@@ -114,8 +114,8 @@ var SlitherBot = window.bot = (function (window) {
 
         changeHeadingRel: function (angle) {
             var heading = {
-                x: window.snake.xx + 500 * bot.cos,
-                y: window.snake.yy + 500 * bot.sin
+                x: window.snake.xx + 500 * cos,
+                y: window.snake.yy + 500 * sin
             };
 
             var cos = Math.cos(-angle);
@@ -140,15 +140,15 @@ var SlitherBot = window.bot = (function (window) {
             var openAngles = [];
             var openStart;
 
-            var sIndex = bot.getAngleIndex(window.snake.ehang) + bot.MAXARC / 2;
-            if (sIndex > bot.MAXARC) sIndex -= bot.MAXARC;
+            var sIndex = getAngleIndex(window.snake.ehang) + MAXARC / 2;
+            if (sIndex > MAXARC) sIndex -= MAXARC;
 
-            for (var i = 0; i < bot.MAXARC; i++) {
-                if (bot.collisionAngles[i] === undefined) {
+            for (var i = 0; i < MAXARC; i++) {
+                if (collisionAngles[i] === undefined) {
                     distance = 0;
                     if (openStart === undefined) openStart = i;
                 } else {
-                    distance = bot.collisionAngles[i].distance;
+                    distance = collisionAngles[i].distance;
                     if (openStart) {
                         openAngles.push({
                             openStart: openStart,
@@ -171,18 +171,18 @@ var SlitherBot = window.bot = (function (window) {
             if (openStart && openAngles[0]) {
                 openAngles[0].openStart = openStart;
                 openAngles[0].sz = openAngles[0].openEnd - openStart;
-                if (openAngles[0].sz < 0) openAngles[0].sz += bot.MAXARC;
+                if (openAngles[0].sz < 0) openAngles[0].sz += MAXARC;
 
             } else if (openStart) {
                 openAngles.push({openStart: openStart, openEnd: openStart, sz: 0});
             }
 
             if (openAngles.length > 0) {
-                openAngles.sort(bot.sortSz);
-                bot.changeHeadingAbs(
-                    (openAngles[0].openEnd - openAngles[0].sz / 2) * bot.opt.arcSize);
+                openAngles.sort(sortSz);
+                changeHeadingAbs(
+                    (openAngles[0].openEnd - openAngles[0].sz / 2) * opt.arcSize);
             } else {
-                bot.changeHeadingAbs(best.aIndex * bot.opt.arcSize);
+                changeHeadingAbs(best.aIndex * opt.arcSize);
             }
         },
 
@@ -194,8 +194,8 @@ var SlitherBot = window.bot = (function (window) {
             }
 
             var end = {
-                x: window.snake.xx + 2000 * bot.cos,
-                y: window.snake.yy + 2000 * bot.sin
+                x: window.snake.xx + 2000 * cos,
+                y: window.snake.yy + 2000 * sin
             };
 
             if (window.visualDebugging) {
@@ -212,9 +212,9 @@ var SlitherBot = window.bot = (function (window) {
             if (canvas.isLeft(
                 { x: window.snake.xx, y: window.snake.yy }, end,
                 { x: point.x, y: point.y })) {
-                bot.changeHeadingAbs(point.ang - ang);
+                changeHeadingAbs(point.ang - ang);
             } else {
-                bot.changeHeadingAbs(point.ang + ang);
+                changeHeadingAbs(point.ang + ang);
             }
         },
 
@@ -226,9 +226,9 @@ var SlitherBot = window.bot = (function (window) {
                 angle += 2 * Math.PI;
             }
 
-            index = Math.round(angle * (1 / bot.opt.arcSize));
+            index = Math.round(angle * (1 / opt.arcSize));
 
-            if (index === bot.MAXARC) {
+            if (index === MAXARC) {
                 return 0;
             }
             return index;
@@ -239,14 +239,14 @@ var SlitherBot = window.bot = (function (window) {
             var ang = canvas.fastAtan2(
                 Math.round(sp.yy - window.snake.yy),
                 Math.round(sp.xx - window.snake.xx));
-            var aIndex = bot.getAngleIndex(ang);
+            var aIndex = getAngleIndex(ang);
 
             var actualDistance = Math.round(Math.pow(
                 Math.sqrt(sp.distance) - sp.radius, 2));
 
-            if (bot.collisionAngles[aIndex] === undefined ||
-                 bot.collisionAngles[aIndex].distance > sp.distance) {
-                bot.collisionAngles[aIndex] = {
+            if (collisionAngles[aIndex] === undefined ||
+                 collisionAngles[aIndex].distance > sp.distance) {
+                collisionAngles[aIndex] = {
                     x: Math.round(sp.xx),
                     y: Math.round(sp.yy),
                     ang: ang,
@@ -264,30 +264,30 @@ var SlitherBot = window.bot = (function (window) {
                 Math.round(f.yy - window.snake.yy),
                 Math.round(f.xx - window.snake.xx));
 
-            var aIndex = bot.getAngleIndex(ang);
+            var aIndex = getAngleIndex(ang);
 
             canvas.getDistance2FromSnake(f);
 
-            if (bot.collisionAngles[aIndex] === undefined ||
-                Math.sqrt(bot.collisionAngles[aIndex].distance) >
-                Math.sqrt(f.distance) + bot.snakeRadius * bot.opt.radiusMult * bot.speedMult / 2) {
-                if (bot.foodAngles[aIndex] === undefined) {
-                    bot.foodAngles[aIndex] = {
+            if (collisionAngles[aIndex] === undefined ||
+                Math.sqrt(collisionAngles[aIndex].distance) >
+                Math.sqrt(f.distance) + snakeRadius * opt.radiusMult * speedMult / 2) {
+                if (foodAngles[aIndex] === undefined) {
+                    foodAngles[aIndex] = {
                         x: Math.round(f.xx),
                         y: Math.round(f.yy),
                         ang: ang,
-                        da: Math.abs(bot.angleBetween(ang, window.snake.ehang)),
+                        da: Math.abs(angleBetween(ang, window.snake.ehang)),
                         distance: f.distance,
                         sz: f.sz,
                         score: (Math.pow(f.sz, 2) / f.distance * f.clusterRatio)
                     };
                 } else {
-                    bot.foodAngles[aIndex].sz += Math.round(f.sz);
+                    foodAngles[aIndex].sz += Math.round(f.sz);
                     if (f.isSparse || f.isDense) {
-                        console.log('Food\'s original score: ' + bot.foodAngles[aIndex].score);
+                        console.log('Food\'s original score: ' + foodAngles[aIndex].score);
                     }
 
-                    bot.foodAngles[aIndex].score += (Math.pow(f.sz, 2) / f.distance * f.clusterRatio);
+                    foodAngles[aIndex].score += (Math.pow(f.sz, 2) / f.distance * f.clusterRatio);
                     if (f.isSparse) {
                         console.log('Food is SPARSE.');
                     }
@@ -304,10 +304,10 @@ var SlitherBot = window.bot = (function (window) {
                         console.log('[TRYING] New score to add (v5): ' + (Math.pow(f.sz, 2) / f.distance * f.clusterRatio));
                     }
 
-                    if (bot.foodAngles[aIndex].distance > f.distance) {
-                        bot.foodAngles[aIndex].x = Math.round(f.xx);
-                        bot.foodAngles[aIndex].y = Math.round(f.yy);
-                        bot.foodAngles[aIndex].distance = f.distance;
+                    if (foodAngles[aIndex].distance > f.distance) {
+                        foodAngles[aIndex].x = Math.round(f.xx);
+                        foodAngles[aIndex].y = Math.round(f.yy);
+                        foodAngles[aIndex].distance = f.distance;
                     }
                 }
             }
@@ -317,8 +317,8 @@ var SlitherBot = window.bot = (function (window) {
         getCollisionPoints: function () {
             var scPoint;
 
-            bot.collisionPoints = [];
-            bot.collisionAngles = [];
+            collisionPoints = [];
+            collisionAngles = [];
 
 
             for (var snake = 0, ls = window.snakes.length; snake < ls; snake++) {
@@ -328,20 +328,20 @@ var SlitherBot = window.bot = (function (window) {
                     window.snakes[snake].alive_amt === 1) {
 
                     var s = window.snakes[snake];
-                    var sRadius = bot.getSnakeWidth(s.sc) / 2;
+                    var sRadius = getSnakeWidth(s.sc) / 2;
                     var sSpMult = Math.min(1, s.sp / 5.78 - 1 );
 
                     scPoint = {
-                        xx: s.xx + Math.cos(s.ehang) * sRadius * sSpMult * bot.opt.radiusMult / 2,
-                        yy: s.yy + Math.sin(s.ehang) * sRadius * sSpMult * bot.opt.radiusMult / 2,
+                        xx: s.xx + Math.cos(s.ehang) * sRadius * sSpMult * opt.radiusMult / 2,
+                        yy: s.yy + Math.sin(s.ehang) * sRadius * sSpMult * opt.radiusMult / 2,
                         snake: snake,
-                        radius: bot.headCircle.radius,
+                        radius: headCircle.radius,
                         head: true
                     };
 
                     canvas.getDistance2FromSnake(scPoint);
-                    bot.addCollisionAngle(scPoint);
-                    bot.collisionPoints.push(scPoint);
+                    addCollisionAngle(scPoint);
+                    collisionPoints.push(scPoint);
 
                     if (window.visualDebugging) {
                         canvas.drawCircle(canvas.circle(
@@ -359,7 +359,7 @@ var SlitherBot = window.bot = (function (window) {
                                 {
                                     x: s.pts[pts].xx,
                                     y: s.pts[pts].yy
-                                }, bot.sectorBox)
+                                }, sectorBox)
                         ) {
                             var collisionPoint = {
                                 xx: s.pts[pts].xx,
@@ -377,12 +377,12 @@ var SlitherBot = window.bot = (function (window) {
                             }
 
                             canvas.getDistance2FromSnake(collisionPoint);
-                            bot.addCollisionAngle(collisionPoint);
+                            addCollisionAngle(collisionPoint);
 
                             if (collisionPoint.distance <= Math.pow(
-                                (bot.headCircle.radius)
+                                (headCircle.radius)
                                 + collisionPoint.radius, 2)) {
-                                bot.collisionPoints.push(collisionPoint);
+                                collisionPoints.push(collisionPoint);
                                 if (window.visualDebugging) {
                                     canvas.drawCircle(canvas.circle(
                                         collisionPoint.xx,
@@ -397,19 +397,19 @@ var SlitherBot = window.bot = (function (window) {
             }
 
             // WALL
-            if (canvas.getDistance2(bot.MID_X, bot.MID_Y, window.snake.xx, window.snake.yy) >
-                Math.pow(bot.MAP_R - 1000, 2)) {
+            if (canvas.getDistance2(MID_X, MID_Y, window.snake.xx, window.snake.yy) >
+                Math.pow(MAP_R - 1000, 2)) {
                 var midAng = canvas.fastAtan2(
-                    window.snake.yy - bot.MID_X, window.snake.xx - bot.MID_Y);
+                    window.snake.yy - MID_X, window.snake.xx - MID_Y);
                 scPoint = {
-                    xx: bot.MID_X + bot.MAP_R * Math.cos(midAng),
-                    yy: bot.MID_Y + bot.MAP_R * Math.sin(midAng),
+                    xx: MID_X + MAP_R * Math.cos(midAng),
+                    yy: MID_Y + MAP_R * Math.sin(midAng),
                     snake: -1,
-                    radius: bot.snakeWidth
+                    radius: snakeWidth
                 };
                 canvas.getDistance2FromSnake(scPoint);
-                bot.collisionPoints.push(scPoint);
-                bot.addCollisionAngle(scPoint);
+                collisionPoints.push(scPoint);
+                addCollisionAngle(scPoint);
                 if (window.visualDebugging) {
                     canvas.drawCircle(canvas.circle(
                         scPoint.xx,
@@ -420,13 +420,13 @@ var SlitherBot = window.bot = (function (window) {
             }
 
 
-            bot.collisionPoints.sort(bot.sortDistance);
+            collisionPoints.sort(sortDistance);
             if (window.visualDebugging) {
-                for (var i = 0; i < bot.collisionAngles.length; i++) {
-                    if (bot.collisionAngles[i] !== undefined) {
+                for (var i = 0; i < collisionAngles.length; i++) {
+                    if (collisionAngles[i] !== undefined) {
                         canvas.drawLine(
                             { x: window.snake.xx, y: window.snake.yy },
-                            { x: bot.collisionAngles[i].x, y: bot.collisionAngles[i].y },
+                            { x: collisionAngles[i].x, y: collisionAngles[i].y },
                             'red', 2);
                     }
                 }
@@ -439,7 +439,7 @@ var SlitherBot = window.bot = (function (window) {
                 Math.round(point.y - window.snake.yy),
                 Math.round(point.x - window.snake.xx));
 
-            if (Math.abs(bot.angleBetween(ang, window.snake.ehang)) < bot.opt.frontAngle) {
+            if (Math.abs(angleBetween(ang, window.snake.ehang)) < opt.frontAngle) {
                 return true;
             } else {
                 return false;
@@ -451,32 +451,32 @@ var SlitherBot = window.bot = (function (window) {
         checkCollision: function () {
             var point;
 
-            bot.getCollisionPoints();
-            if (bot.collisionPoints.length === 0) return false;
+            getCollisionPoints();
+            if (collisionPoints.length === 0) return false;
 
-            for (var i = 0; i < bot.collisionPoints.length; i++) {
+            for (var i = 0; i < collisionPoints.length; i++) {
                 var collisionCircle = canvas.circle(
-                    bot.collisionPoints[i].xx,
-                    bot.collisionPoints[i].yy,
-                    bot.collisionPoints[i].radius
+                    collisionPoints[i].xx,
+                    collisionPoints[i].yy,
+                    collisionPoints[i].radius
                 );
 
                 // -1 snake is special case for non snake object.
-                if ((point = canvas.circleIntersect(bot.headCircle, collisionCircle)) &&
-                    bot.inFrontAngle(point)) {
-                    if (bot.collisionPoints[i].snake !== -1 &&
-                        bot.collisionPoints[i].head &&
-                        window.snakes[bot.collisionPoints[i].snake].sp > 10) {
+                if ((point = canvas.circleIntersect(headCircle, collisionCircle)) &&
+                    inFrontAngle(point)) {
+                    if (collisionPoints[i].snake !== -1 &&
+                        collisionPoints[i].head &&
+                        window.snakes[collisionPoints[i].snake].sp > 10) {
                         window.setAcceleration(1);
                     } else {
-                        window.setAcceleration(bot.defaultAccel);
+                        window.setAcceleration(defaultAccel);
                     }
-                    bot.avoidCollisionPoint(point);
+                    avoidCollisionPoint(point);
                     return true;
                 }
             }
 
-            window.setAcceleration(bot.defaultAccel);
+            window.setAcceleration(defaultAccel);
             return false;
         },
 
@@ -486,9 +486,9 @@ var SlitherBot = window.bot = (function (window) {
             var highSnake;
             var enAll = 0;
 
-            for (var i = 0; i < bot.collisionAngles.length; i++) {
-                if (bot.collisionAngles[i] !== undefined) {
-                    var s = bot.collisionAngles[i].snake;
+            for (var i = 0; i < collisionAngles.length; i++) {
+                if (collisionAngles[i] !== undefined) {
+                    var s = collisionAngles[i].snake;
                     if (enSnake[s]) {
                         enSnake[s]++;
                     } else {
@@ -499,41 +499,41 @@ var SlitherBot = window.bot = (function (window) {
                         highSnake = s;
                     }
 
-                    if (bot.collisionAngles[i].distance <
-                        Math.pow(bot.snakeRadius * bot.opt.enCircleDistanceMult, 2)) {
+                    if (collisionAngles[i].distance <
+                        Math.pow(snakeRadius * opt.enCircleDistanceMult, 2)) {
                         enAll++;
                     }
                 }
             }
 
-            if (high > bot.MAXARC * bot.opt.enCircleThreshold) {
-                bot.headingBestAngle();
+            if (high > MAXARC * opt.enCircleThreshold) {
+                headingBestAngle();
 
-                if (high !== bot.MAXARC && window.snakes[highSnake].sp > 10) {
+                if (high !== MAXARC && window.snakes[highSnake].sp > 10) {
                     window.setAcceleration(1);
                 } else {
-                    window.setAcceleration(bot.defaultAccel);
+                    window.setAcceleration(defaultAccel);
                 }
 
                 if (window.visualDebugging) {
                     canvas.drawCircle(canvas.circle(
                         window.snake.xx,
                         window.snake.yy,
-                        bot.opt.radiusMult * bot.snakeRadius),
+                        opt.radiusMult * snakeRadius),
                         'red', true, 0.2);
                 }
                 return true;
             }
 
-            if (enAll > bot.MAXARC * bot.opt.enCircleAllThreshold) {
-                bot.headingBestAngle();
-                window.setAcceleration(bot.defaultAccel);
+            if (enAll > MAXARC * opt.enCircleAllThreshold) {
+                headingBestAngle();
+                window.setAcceleration(defaultAccel);
 
                 if (window.visualDebugging) {
                     canvas.drawCircle(canvas.circle(
                         window.snake.xx,
                         window.snake.yy,
-                        bot.snakeRadius * bot.opt.enCircleDistanceMult),
+                        snakeRadius * opt.enCircleDistanceMult),
                         'yellow', true, 0.2);
                 }
                 return true;
@@ -542,12 +542,12 @@ var SlitherBot = window.bot = (function (window) {
                     canvas.drawCircle(canvas.circle(
                         window.snake.xx,
                         window.snake.yy,
-                        bot.snakeRadius * bot.opt.enCircleDistanceMult),
+                        snakeRadius * opt.enCircleDistanceMult),
                         'yellow');
                 }
             }
 
-            window.setAcceleration(bot.defaultAccel);
+            window.setAcceleration(defaultAccel);
             return false;
         },
 
@@ -555,7 +555,7 @@ var SlitherBot = window.bot = (function (window) {
             let x = window.snake.xx + window.snake.fx;
             let y = window.snake.yy + window.snake.fy;
             let l = 0.0;
-            bot.pts = [{
+            pts = [{
                 x: x,
                 y: y,
                 len: l
@@ -567,7 +567,7 @@ var SlitherBot = window.bot = (function (window) {
                     let xx = window.snake.pts[p].xx + window.snake.pts[p].fx;
                     let yy = window.snake.pts[p].yy + window.snake.pts[p].fy;
                     let ll = l + Math.sqrt(canvas.getDistance2(x, y, xx, yy));
-                    bot.pts.push({
+                    pts.push({
                         x: xx,
                         y: yy,
                         len: ll
@@ -577,7 +577,7 @@ var SlitherBot = window.bot = (function (window) {
                     l = ll;
                 }
             }
-            bot.len = l;
+            len = l;
         },
 
         // set the direction of rotation based on the velocity of
@@ -586,10 +586,10 @@ var SlitherBot = window.bot = (function (window) {
             // find center mass (cx, cy)
             let cx = 0.0;
             let cy = 0.0;
-            let pn = bot.pts.length;
+            let pn = pts.length;
             for (let p = 0; p < pn; p++) {
-                cx += bot.pts[p].x;
-                cy += bot.pts[p].y;
+                cx += pts[p].x;
+                cy += pts[p].y;
             }
             cx /= pn;
             cy /= pn;
@@ -602,38 +602,38 @@ var SlitherBot = window.bot = (function (window) {
             let dx = head.x - cx;
             let dy = head.y - cy;
 
-            // check the sign of dot product of (bot.cos, bot.sin) and (-dy, dx)
-            if (- dy * bot.cos + dx * bot.sin > 0) {
+            // check the sign of dot product of (cos, sin) and (-dy, dx)
+            if (- dy * cos + dx * sin > 0) {
                 // clockwise
-                bot.opt.followCircleDirection = -1;
+                opt.followCircleDirection = -1;
             } else {
                 // couter clockwise
-                bot.opt.followCircleDirection = +1;
+                opt.followCircleDirection = +1;
             }
         },
 
         // returns a point on snake's body on given length from the head
-        // assumes that bot.pts is populated
+        // assumes that pts is populated
         smoothPoint: function (t) {
             // range check
-            if (t >= bot.len) {
-                let tail = bot.pts[bot.pts.length - 1];
+            if (t >= len) {
+                let tail = pts[pts.length - 1];
                 return {
                     x: tail.x,
                     y: tail.y
                 };
             } else if (t <= 0 ) {
                 return {
-                    x: bot.pts[0].x,
-                    y: bot.pts[0].y
+                    x: pts[0].x,
+                    y: pts[0].y
                 };
             }
             // binary search
             let p = 0;
-            let q = bot.pts.length - 1;
+            let q = pts.length - 1;
             while (q - p > 1) {
                 let m = Math.round((p + q) / 2);
-                if (t > bot.pts[m].len) {
+                if (t > pts[m].len) {
                     p = m;
                 } else {
                     q = m;
@@ -641,12 +641,12 @@ var SlitherBot = window.bot = (function (window) {
             }
             // now q = p + 1, and the point is in between;
             // compute approximation
-            let wp = bot.pts[q].len - t;
-            let wq = t - bot.pts[p].len;
+            let wp = pts[q].len - t;
+            let wq = t - pts[p].len;
             let w = wp + wq;
             return {
-                x: (wp * bot.pts[p].x + wq * bot.pts[q].x) / w,
-                y: (wp * bot.pts[p].y + wq * bot.pts[q].y) / w
+                x: (wp * pts[p].x + wq * pts[q].x) / w,
+                y: (wp * pts[p].y + wq * pts[q].y) / w
             };
         },
 
@@ -659,7 +659,7 @@ var SlitherBot = window.bot = (function (window) {
                 y: window.snake.yy + window.snake.fy
             };
 
-            let ptsLength = bot.pts.length;
+            let ptsLength = pts.length;
 
             // skip head area
             let start_n = 0;
@@ -668,21 +668,21 @@ var SlitherBot = window.bot = (function (window) {
                 let prev_d2 = start_d2;
                 start_n ++;
                 start_d2 = canvas.getDistance2(head.x, head.y,
-                    bot.pts[start_n].x, bot.pts[start_n].y);
+                    pts[start_n].x, pts[start_n].y);
                 if (start_d2 < prev_d2 || start_n == ptsLength - 1) {
                     break;
                 }
             }
 
             if (start_n >= ptsLength || start_n <= 1) {
-                return bot.len;
+                return len;
             }
 
-            // find closets point in bot.pts
+            // find closets point in pts
             let min_n = start_n;
             let min_d2 = start_d2;
             for (let n = min_n + 1; n < ptsLength; n++) {
-                let d2 = canvas.getDistance2(head.x, head.y, bot.pts[n].x, bot.pts[n].y);
+                let d2 = canvas.getDistance2(head.x, head.y, pts[n].x, pts[n].y);
                 if (d2 < min_d2) {
                     min_n = n;
                     min_d2 = d2;
@@ -695,12 +695,12 @@ var SlitherBot = window.bot = (function (window) {
             if (min_n == ptsLength - 1) {
                 next_n = min_n - 1;
                 next_d2 = canvas.getDistance2(head.x, head.y,
-                    bot.pts[next_n].x, bot.pts[next_n].y);
+                    pts[next_n].x, pts[next_n].y);
             } else {
                 let d2m = canvas.getDistance2(head.x, head.y,
-                    bot.pts[min_n - 1].x, bot.pts[min_n - 1].y);
+                    pts[min_n - 1].x, pts[min_n - 1].y);
                 let d2p = canvas.getDistance2(head.x, head.y,
-                    bot.pts[min_n + 1].x, bot.pts[min_n + 1].y);
+                    pts[min_n + 1].x, pts[min_n + 1].y);
                 if (d2m < d2p) {
                     next_n = min_n - 1;
                     next_d2 = d2m;
@@ -711,15 +711,15 @@ var SlitherBot = window.bot = (function (window) {
             }
 
             // compute approximation
-            let t2 = bot.pts[min_n].len - bot.pts[next_n].len;
+            let t2 = pts[min_n].len - pts[next_n].len;
             t2 *= t2;
 
             if (t2 == 0) {
-                return bot.pts[min_n].len;
+                return pts[min_n].len;
             } else {
                 let min_w = t2 - (min_d2 - next_d2);
                 let next_w = t2 + (min_d2 - next_d2);
-                return (bot.pts[min_n].len * min_w + bot.pts[next_n].len * next_w) / (2 * t2);
+                return (pts[min_n].len * min_w + pts[next_n].len * next_w) / (2 * t2);
             }
         },
 
@@ -729,41 +729,41 @@ var SlitherBot = window.bot = (function (window) {
                 x: window.snake.xx + window.snake.fx,
                 y: window.snake.yy + window.snake.fy
             };
-            const o = bot.opt.followCircleDirection;
+            const o = opt.followCircleDirection;
             var pts = [
                 {
-                    x: head.x - o * offset * bot.sin,
-                    y: head.y + o * offset * bot.cos
+                    x: head.x - o * offset * sin,
+                    y: head.y + o * offset * cos
                 },
                 {
-                    x: head.x + bot.snakeWidth * bot.cos +
-                        offset * (bot.cos - o * bot.sin),
-                    y: head.y + bot.snakeWidth * bot.sin +
-                        offset * (bot.sin + o * bot.cos)
+                    x: head.x + snakeWidth * cos +
+                        offset * (cos - o * sin),
+                    y: head.y + snakeWidth * sin +
+                        offset * (sin + o * cos)
                 },
                 {
-                    x: head.x + 1.75 * bot.snakeWidth * bot.cos +
-                        o * 0.3 * bot.snakeWidth * bot.sin +
-                        offset * (bot.cos - o * bot.sin),
-                    y: head.y + 1.75 * bot.snakeWidth * bot.sin -
-                        o * 0.3 * bot.snakeWidth * bot.cos +
-                        offset * (bot.sin + o * bot.cos)
+                    x: head.x + 1.75 * snakeWidth * cos +
+                        o * 0.3 * snakeWidth * sin +
+                        offset * (cos - o * sin),
+                    y: head.y + 1.75 * snakeWidth * sin -
+                        o * 0.3 * snakeWidth * cos +
+                        offset * (sin + o * cos)
                 },
                 {
-                    x: head.x + 2.5 * bot.snakeWidth * bot.cos +
-                        o * 0.7 * bot.snakeWidth * bot.sin +
-                        offset * (bot.cos - o * bot.sin),
-                    y: head.y + 2.5 * bot.snakeWidth * bot.sin -
-                        o * 0.7 * bot.snakeWidth * bot.cos +
-                        offset * (bot.sin + o * bot.cos)
+                    x: head.x + 2.5 * snakeWidth * cos +
+                        o * 0.7 * snakeWidth * sin +
+                        offset * (cos - o * sin),
+                    y: head.y + 2.5 * snakeWidth * sin -
+                        o * 0.7 * snakeWidth * cos +
+                        offset * (sin + o * cos)
                 },
                 {
-                    x: head.x + 3 * bot.snakeWidth * bot.cos +
-                        o * 1.2 * bot.snakeWidth * bot.sin +
-                        offset * bot.cos,
-                    y: head.y + 3 * bot.snakeWidth * bot.sin -
-                        o * 1.2 * bot.snakeWidth * bot.cos +
-                        offset * bot.sin
+                    x: head.x + 3 * snakeWidth * cos +
+                        o * 1.2 * snakeWidth * sin +
+                        offset * cos,
+                    y: head.y + 3 * snakeWidth * sin -
+                        o * 1.2 * snakeWidth * cos +
+                        offset * sin
                 },
                 {
                     x: targetPoint.x +
@@ -789,13 +789,13 @@ var SlitherBot = window.bot = (function (window) {
 
         followCircleSelf: function () {
 
-            bot.populatePts();
-            bot.determineCircleDirection();
-            const o = bot.opt.followCircleDirection;
+            populatePts();
+            determineCircleDirection();
+            const o = opt.followCircleDirection;
 
 
             // exit if too short
-            if (bot.len < 9 * bot.snakeWidth) {
+            if (len < 9 * snakeWidth) {
                 return;
             }
 
@@ -804,11 +804,11 @@ var SlitherBot = window.bot = (function (window) {
                 y: window.snake.yy + window.snake.fy
             };
 
-            let closePointT = bot.closestBodyPoint();
-            let closePoint = bot.smoothPoint(closePointT);
+            let closePointT = closestBodyPoint();
+            let closePoint = smoothPoint(closePointT);
 
             // approx tangent and normal vectors and closePoint
-            var closePointNext = bot.smoothPoint(closePointT - bot.snakeWidth);
+            var closePointNext = smoothPoint(closePointT - snakeWidth);
             var closePointTangent = canvas.unitVector({
                 x: closePointNext.x - closePoint.x,
                 y: closePointNext.y - closePoint.y});
@@ -819,21 +819,21 @@ var SlitherBot = window.bot = (function (window) {
 
             // angle wrt closePointTangent
             var currentCourse = Math.asin(Math.max(
-                -1, Math.min(1, bot.cos * closePointNormal.x + bot.sin * closePointNormal.y)));
+                -1, Math.min(1, cos * closePointNormal.x + sin * closePointNormal.y)));
 
             // compute (oriented) distance from the body at closePointDist
             var closePointDist = (head.x - closePoint.x) * closePointNormal.x +
                 (head.y - closePoint.y) * closePointNormal.y;
 
             // construct polygon for snake inside
-            var insidePolygonStartT = 5 * bot.snakeWidth;
-            var insidePolygonEndT = closePointT + 5 * bot.snakeWidth;
+            var insidePolygonStartT = 5 * snakeWidth;
+            var insidePolygonEndT = closePointT + 5 * snakeWidth;
             var insidePolygonPts = [
-                bot.smoothPoint(insidePolygonEndT),
-                bot.smoothPoint(insidePolygonStartT)
+                smoothPoint(insidePolygonEndT),
+                smoothPoint(insidePolygonStartT)
             ];
-            for (let t = insidePolygonStartT; t < insidePolygonEndT; t += bot.snakeWidth) {
-                insidePolygonPts.push(bot.smoothPoint(t));
+            for (let t = insidePolygonStartT; t < insidePolygonEndT; t += snakeWidth) {
+                insidePolygonPts.push(smoothPoint(t));
             }
 
             var insidePolygon = canvas.addPolyBox({
@@ -843,22 +843,22 @@ var SlitherBot = window.bot = (function (window) {
             // get target point; this is an estimate where we land if we hurry
             var targetPointT = closePointT;
             var targetPointFar = 0.0;
-            let targetPointStep = bot.snakeWidth / 64;
-            for (let h = closePointDist, a = currentCourse; h >= 0.125 * bot.snakeWidth; ) {
+            let targetPointStep = snakeWidth / 64;
+            for (let h = closePointDist, a = currentCourse; h >= 0.125 * snakeWidth; ) {
                 targetPointT -= targetPointStep;
                 targetPointFar += targetPointStep * Math.cos(a);
                 h += targetPointStep * Math.sin(a);
-                a = Math.max(-Math.PI / 4, a - targetPointStep / bot.snakeWidth);
+                a = Math.max(-Math.PI / 4, a - targetPointStep / snakeWidth);
             }
 
-            var targetPoint = bot.smoothPoint(targetPointT);
+            var targetPoint = smoothPoint(targetPointT);
 
-            var pastTargetPointT = targetPointT - 3 * bot.snakeWidth;
-            var pastTargetPoint = bot.smoothPoint(pastTargetPointT);
+            var pastTargetPointT = targetPointT - 3 * snakeWidth;
+            var pastTargetPoint = smoothPoint(pastTargetPointT);
 
             // look for danger from enemies
-            var enemyBodyOffsetDelta = 0.25 * bot.snakeWidth;
-            var enemyHeadDist2 = 64 * 64 * bot.snakeWidth * bot.snakeWidth;
+            var enemyBodyOffsetDelta = 0.25 * snakeWidth;
+            var enemyHeadDist2 = 64 * 64 * snakeWidth * snakeWidth;
             for (let snake = 0, snakesNum = window.snakes.length; snake < snakesNum; snake++) {
                 if (window.snakes[snake].id !== window.snake.id
                     && window.snakes[snake].alive_amt === 1) {
@@ -868,9 +868,9 @@ var SlitherBot = window.bot = (function (window) {
                     };
                     let enemyAhead = {
                         x: enemyHead.x +
-                            Math.cos(window.snakes[snake].ang) * bot.snakeWidth,
+                            Math.cos(window.snakes[snake].ang) * snakeWidth,
                         y: enemyHead.y +
-                            Math.sin(window.snakes[snake].ang) * bot.snakeWidth
+                            Math.sin(window.snakes[snake].ang) * snakeWidth
                     };
                     // heads
                     if (!canvas.pointInPoly(enemyHead, insidePolygon)) {
@@ -895,17 +895,17 @@ var SlitherBot = window.bot = (function (window) {
                                 y: window.snakes[snake].pts[pts].yy +
                                    window.snakes[snake].pts[pts].fy
                             };
-                            while (!offsetSet || (enemyBodyOffsetDelta >= -bot.snakeWidth
+                            while (!offsetSet || (enemyBodyOffsetDelta >= -snakeWidth
                                 && canvas.pointInPoly(point, cpolbody))) {
                                 if (!offsetSet) {
                                     offsetSet = true;
                                 } else {
-                                    enemyBodyOffsetDelta -= 0.0625 * bot.snakeWidth;
+                                    enemyBodyOffsetDelta -= 0.0625 * snakeWidth;
                                 }
-                                offset = 0.5 * (bot.snakeWidth +
-                                    bot.getSnakeWidth(window.snakes[snake].sc)) +
+                                offset = 0.5 * (snakeWidth +
+                                    getSnakeWidth(window.snakes[snake].sc)) +
                                     enemyBodyOffsetDelta;
-                                cpolbody = bot.bodyDangerZone(
+                                cpolbody = bodyDangerZone(
                                     offset, targetPoint, closePointNormal, closePointDist,
                                     pastTargetPoint, closePoint);
 
@@ -935,7 +935,7 @@ var SlitherBot = window.bot = (function (window) {
                 canvas.drawCircle(canvas.circle(
                     closePoint.x,
                     closePoint.y,
-                    bot.snakeWidth * 0.25
+                    snakeWidth * 0.25
                 ), 'white', false);
             }
 
@@ -944,19 +944,19 @@ var SlitherBot = window.bot = (function (window) {
                 canvas.drawCircle(canvas.circle(
                     targetPoint.x,
                     targetPoint.y,
-                    bot.snakeWidth + 2 * targetPointFar
+                    snakeWidth + 2 * targetPointFar
                 ), 'white', false);
                 canvas.drawCircle(canvas.circle(
                     targetPoint.x,
                     targetPoint.y,
-                    0.2 * bot.snakeWidth
+                    0.2 * snakeWidth
                 ), 'white', false);
             }
 
             // draw sample cpolbody
             if (window.visualDebugging) {
-                let soffset = 0.5 * bot.snakeWidth;
-                let scpolbody = bot.bodyDangerZone(
+                let soffset = 0.5 * snakeWidth;
+                let scpolbody = bodyDangerZone(
                     soffset, targetPoint, closePointNormal,
                     closePointDist, pastTargetPoint, closePoint);
                 for (let p = 0, l = scpolbody.pts.length; p < l; p++) {
@@ -976,7 +976,7 @@ var SlitherBot = window.bot = (function (window) {
             // expand?
             let targetCourse = currentCourse + 0.25;
             // enemy head nearby?
-            let headProx = -1.0 - (2 * targetPointFar - enemyHeadDist) / bot.snakeWidth;
+            let headProx = -1.0 - (2 * targetPointFar - enemyHeadDist) / snakeWidth;
             if (headProx > 0) {
                 headProx = 0.125 * headProx * headProx;
             } else {
@@ -985,16 +985,16 @@ var SlitherBot = window.bot = (function (window) {
             targetCourse = Math.min(targetCourse, headProx);
             // enemy body nearby?
             targetCourse = Math.min(
-                targetCourse, targetCourse + (enemyBodyOffsetDelta - 0.0625 * bot.snakeWidth) /
-                bot.snakeWidth);
+                targetCourse, targetCourse + (enemyBodyOffsetDelta - 0.0625 * snakeWidth) /
+                snakeWidth);
             // small tail?
-            var tailBehind = bot.len - closePointT;
+            var tailBehind = len - closePointT;
             var targetDir = canvas.unitVector({
-                x: bot.opt.followCircleTarget.x - head.x,
-                y: bot.opt.followCircleTarget.y - head.y
+                x: opt.followCircleTarget.x - head.x,
+                y: opt.followCircleTarget.y - head.y
             });
             var driftQ = targetDir.x * closePointNormal.x + targetDir.y * closePointNormal.y;
-            var allowTail = bot.snakeWidth * (2 - 0.5 * driftQ);
+            var allowTail = snakeWidth * (2 - 0.5 * driftQ);
             // a line in the direction of the target point
             if (window.visualDebugging) {
                 canvas.drawLine(
@@ -1004,14 +1004,14 @@ var SlitherBot = window.bot = (function (window) {
             }
             targetCourse = Math.min(
                 targetCourse,
-                (tailBehind - allowTail + (bot.snakeWidth - closePointDist)) /
-                bot.snakeWidth);
+                (tailBehind - allowTail + (snakeWidth - closePointDist)) /
+                snakeWidth);
             // far away?
             targetCourse = Math.min(
-                targetCourse, - 0.5 * (closePointDist - 4 * bot.snakeWidth) / bot.snakeWidth);
+                targetCourse, - 0.5 * (closePointDist - 4 * snakeWidth) / snakeWidth);
             // final corrections
             // too fast in?
-            targetCourse = Math.max(targetCourse, -0.75 * closePointDist / bot.snakeWidth);
+            targetCourse = Math.max(targetCourse, -0.75 * closePointDist / snakeWidth);
             // too fast out?
             targetCourse = Math.min(targetCourse, 1.0);
 
@@ -1022,8 +1022,8 @@ var SlitherBot = window.bot = (function (window) {
                     o * closePointTangent.x * Math.sin(targetCourse)
             };
             var goal = {
-                x: head.x + goalDir.x * 4 * bot.snakeWidth,
-                y: head.y + goalDir.y * 4 * bot.snakeWidth
+                x: head.x + goalDir.x * 4 * snakeWidth,
+                y: head.y + goalDir.y * 4 * snakeWidth
             };
 
 
@@ -1059,17 +1059,17 @@ var SlitherBot = window.bot = (function (window) {
             return a.distance - b.distance;
         },
 
-        //Set the snake ID of the current bot. Should only be called once.
+        //Set the snake ID of the current  Should only be called once.
         setBotSnakeId: function () {
-            if (bot.id === 0) {
+            if (id === 0) {
                 var id = window.snakes[0].id;
                 console.log('Setting bot snake ID to: ' + id);
-                bot.id = id;
+                id = id;
             }
          },
 
         computeFoodGoal: function () {
-            bot.foodAngles = [];
+            foodAngles = [];
 
             for (var i = 0; i < window.foods.length && window.foods[i] !== null; i++) {
                 var f = window.foods[i];
@@ -1081,10 +1081,10 @@ var SlitherBot = window.bot = (function (window) {
                     !(
                         canvas.circleIntersect(
                             canvas.circle(f.xx, f.yy, 2),
-                            bot.sidecircle_l) ||
+                            sidecircle_l) ||
                         canvas.circleIntersect(
                             canvas.circle(f.xx, f.yy, 2),
-                            bot.sidecircle_r))
+                            sidecircle_r))
 
                             ) {
                             //calculate clustering index.
@@ -1093,7 +1093,7 @@ var SlitherBot = window.bot = (function (window) {
                                 var distanceFromCurrentFood = Math.sqrt(Math.pow(f.xx - clusterFood.xx, 2) + Math.pow(f.yy - clusterFood.yy, 2));
 
                                 //If food is close enough, then add distance to running tally and increment number of foods counted.
-                                if (distanceFromCurrentFood <= bot.opt.foodClusterRadius && distanceFromCurrentFood > 0) {
+                                if (distanceFromCurrentFood <= opt.foodClusterRadius && distanceFromCurrentFood > 0) {
                                     totalClusterDistance += distanceFromCurrentFood;
                                     numberOfFoodsInRadius++;
 
@@ -1118,176 +1118,176 @@ var SlitherBot = window.bot = (function (window) {
                                 f.isSparse = false;
                             }
 
-                            bot.addFoodAngle(f);
+                            addFoodAngle(f);
                 }
             }
 
-            bot.foodAngles.sort(bot.sortScore);
+            foodAngles.sort(sortScore);
 
-            if (bot.foodAngles[0] !== undefined && bot.foodAngles[0].sz > 0) {
-                bot.currentFood = { x: bot.foodAngles[0].x,
-                                    y: bot.foodAngles[0].y,
-                                    sz: bot.foodAngles[0].sz,
-                                    da: bot.foodAngles[0].da };
+            if (foodAngles[0] !== undefined && foodAngles[0].sz > 0) {
+                currentFood = { x: foodAngles[0].x,
+                                    y: foodAngles[0].y,
+                                    sz: foodAngles[0].sz,
+                                    da: foodAngles[0].da };
             } else {
-                bot.currentFood = { x: bot.MID_X, y: bot.MID_Y, sz: 0 };
+                currentFood = { x: MID_X, y: MID_Y, sz: 0 };
             }
         },
 
         foodAccel: function () {
             var aIndex = 0;
 
-            if (bot.currentFood && bot.currentFood.sz > bot.opt.foodAccelSz) {
-                aIndex = bot.getAngleIndex(bot.currentFood.ang);
+            if (currentFood && currentFood.sz > opt.foodAccelSz) {
+                aIndex = getAngleIndex(currentFood.ang);
 
                 if (
-                    bot.collisionAngles[aIndex] && bot.collisionAngles[aIndex].distance >
-                    bot.currentFood.distance + bot.snakeRadius * bot.opt.radiusMult
-                    && bot.currentFood.da < bot.opt.foodAccelDa) {
+                    collisionAngles[aIndex] && collisionAngles[aIndex].distance >
+                    currentFood.distance + snakeRadius * opt.radiusMult
+                    && currentFood.da < opt.foodAccelDa) {
                     return 1;
                 }
 
-                if (bot.collisionAngles[aIndex] === undefined
-                    && bot.currentFood.da < bot.opt.foodAccelDa) {
+                if (collisionAngles[aIndex] === undefined
+                    && currentFood.da < opt.foodAccelDa) {
                     return 1;
                 }
             }
 
-            return bot.defaultAccel;
+            return defaultAccel;
         },
 
         toCircle: function () {
             for (var i = 0; i < window.snake.pts.length && window.snake.pts[i].dying; i++);
-            const o = bot.opt.followCircleDirection;
+            const o = opt.followCircleDirection;
             var tailCircle = canvas.circle(
                 window.snake.pts[i].xx,
                 window.snake.pts[i].yy,
-                bot.headCircle.radius
+                headCircle.radius
             );
 
             if (window.visualDebugging) {
                 canvas.drawCircle(tailCircle, 'blue', false);
             }
 
-            window.setAcceleration(bot.defaultAccel);
-            bot.changeHeadingRel(o * Math.PI / 32);
+            window.setAcceleration(defaultAccel);
+            changeHeadingRel(o * Math.PI / 32);
 
-            if (canvas.circleIntersect(bot.headCircle, tailCircle)) {
-                bot.stage = 'circle';
+            if (canvas.circleIntersect(headCircle, tailCircle)) {
+                stage = 'circle';
             }
         },
 
         every: function () {
-            bot.MID_X = window.grd;
-            bot.MID_Y = window.grd;
-            bot.MAP_R = window.grd * 0.98;
-            bot.MAXARC = (2 * Math.PI) / bot.opt.arcSize;
+            MID_X = window.grd;
+            MID_Y = window.grd;
+            MAP_R = window.grd * 0.98;
+            MAXARC = (2 * Math.PI) / opt.arcSize;
 
-            if (bot.opt.followCircleTarget === undefined) {
-                bot.opt.followCircleTarget = {
-                    x: bot.MID_X,
-                    y: bot.MID_Y
+            if (opt.followCircleTarget === undefined) {
+                opt.followCircleTarget = {
+                    x: MID_X,
+                    y: MID_Y
                 };
             }
 
-            bot.sectorBoxSide = Math.floor(Math.sqrt(window.sectors.length)) * window.sector_size;
-            bot.sectorBox = canvas.rect(
-                window.snake.xx - (bot.sectorBoxSide / 2),
-                window.snake.yy - (bot.sectorBoxSide / 2),
-                bot.sectorBoxSide, bot.sectorBoxSide);
-            // if (window.visualDebugging) canvas.drawRect(bot.sectorBox, '#c0c0c0', true, 0.1);
+            sectorBoxSide = Math.floor(Math.sqrt(window.sectors.length)) * window.sector_size;
+            sectorBox = canvas.rect(
+                window.snake.xx - (sectorBoxSide / 2),
+                window.snake.yy - (sectorBoxSide / 2),
+                sectorBoxSide, sectorBoxSide);
+            // if (window.visualDebugging) canvas.drawRect(sectorBox, '#c0c0c0', true, 0.1);
 
-            bot.cos = Math.cos(window.snake.ang);
-            bot.sin = Math.sin(window.snake.ang);
+            cos = Math.cos(window.snake.ang);
+            sin = Math.sin(window.snake.ang);
 
-            bot.speedMult = window.snake.sp / bot.opt.speedBase;
-            bot.snakeRadius = bot.getSnakeWidth() / 2;
-            bot.snakeWidth = bot.getSnakeWidth();
-            bot.snakeLength = Math.floor(15 * (window.fpsls[window.snake.sct] + window.snake.fam /
+            speedMult = window.snake.sp / opt.speedBase;
+            snakeRadius = getSnakeWidth() / 2;
+            snakeWidth = getSnakeWidth();
+            snakeLength = Math.floor(15 * (window.fpsls[window.snake.sct] + window.snake.fam /
                 window.fmlts[window.snake.sct] - 1) - 5);
 
-            bot.headCircle = canvas.circle(
-                window.snake.xx + bot.cos * Math.min(1, bot.speedMult - 1) *
-                bot.opt.radiusMult / 2 * bot.snakeRadius,
-                window.snake.yy + bot.sin * Math.min(1, bot.speedMult - 1) *
-                bot.opt.radiusMult / 2 * bot.snakeRadius,
-                bot.opt.radiusMult / 2 * bot.snakeRadius
+            headCircle = canvas.circle(
+                window.snake.xx + cos * Math.min(1, speedMult - 1) *
+                opt.radiusMult / 2 * snakeRadius,
+                window.snake.yy + sin * Math.min(1, speedMult - 1) *
+                opt.radiusMult / 2 * snakeRadius,
+                opt.radiusMult / 2 * snakeRadius
             );
 
-            bot.sidecircle_r = canvas.circle(
+            sidecircle_r = canvas.circle(
                 window.snake.lnp.xx -
-                ((window.snake.lnp.yy + bot.sin * bot.snakeWidth) -
+                ((window.snake.lnp.yy + sin * snakeWidth) -
                     window.snake.lnp.yy),
                 window.snake.lnp.yy +
-                ((window.snake.lnp.xx + bot.cos * bot.snakeWidth) -
+                ((window.snake.lnp.xx + cos * snakeWidth) -
                     window.snake.lnp.xx),
-                bot.snakeWidth * bot.speedMult
+                snakeWidth * speedMult
             );
 
-            bot.sidecircle_l = canvas.circle(
+            sidecircle_l = canvas.circle(
                 window.snake.lnp.xx +
-                ((window.snake.lnp.yy + bot.sin * bot.snakeWidth) -
+                ((window.snake.lnp.yy + sin * snakeWidth) -
                     window.snake.lnp.yy),
                 window.snake.lnp.yy -
-                ((window.snake.lnp.xx + bot.cos * bot.snakeWidth) -
+                ((window.snake.lnp.xx + cos * snakeWidth) -
                     window.snake.lnp.xx),
-                bot.snakeWidth * bot.speedMult
+                snakeWidth * speedMult
             );
 
 
             if (window.visualDebugging) {
-                canvas.drawCircle(bot.headCircle, 'blue', false);
-                canvas.drawCircle(bot.sidecircle_r, 'green', false);
-                canvas.drawCircle(bot.sidecircle_l, 'green', false);
+                canvas.drawCircle(headCircle, 'blue', false);
+                canvas.drawCircle(sidecircle_r, 'green', false);
+                canvas.drawCircle(sidecircle_l, 'green', false);
             }
 
         },
 
         // Main bot
         go: function () {
-            bot.every();
+            every();
 
-            if (bot.snakeLength < bot.opt.followCircleLength) {
-                bot.stage = 'grow';
+            if (snakeLength < opt.followCircleLength) {
+                stage = 'grow';
             }
 
-            if (bot.currentFood && bot.stage !== 'grow') {
-                bot.currentFood = undefined;
+            if (currentFood && stage !== 'grow') {
+                currentFood = undefined;
             }
 
-            if (bot.stage === 'circle' && !bot.isSelfCirclingEnabled) {
-                window.setAcceleration(bot.defaultAccel);
-                bot.followCircleSelf();
-            } else if (bot.checkCollision() || bot.checkEncircle()) {
-                if (bot.actionTimeout) {
-                    window.clearTimeout(bot.actionTimeout);
-                    bot.actionTimeout = window.setTimeout(
-                        bot.actionTimer, 1000 / bot.opt.targetFps * bot.opt.collisionDelay);
+            if (stage === 'circle' && !isSelfCirclingEnabled) {
+                window.setAcceleration(defaultAccel);
+                followCircleSelf();
+            } else if (checkCollision() || checkEncircle()) {
+                if (actionTimeout) {
+                    window.clearTimeout(actionTimeout);
+                    actionTimeout = window.setTimeout(
+                        actionTimer, 1000 / opt.targetFps * opt.collisionDelay);
                 }
             } else {
-                if (bot.snakeLength > bot.opt.followCircleLength) {
-                    bot.stage = 'tocircle';
+                if (snakeLength > opt.followCircleLength) {
+                    stage = 'tocircle';
                 }
-                if (bot.actionTimeout === undefined) {
-                    bot.actionTimeout = window.setTimeout(
-                        bot.actionTimer, 1000 / bot.opt.targetFps * bot.opt.actionFrames);
+                if (actionTimeout === undefined) {
+                    actionTimeout = window.setTimeout(
+                        actionTimer, 1000 / opt.targetFps * opt.actionFrames);
                 }
-                window.setAcceleration(bot.foodAccel());
+                window.setAcceleration(foodAccel());
             }
         },
 
         // Timer version of food check
         actionTimer: function () {
             if (window.playing && window.snake !== null && window.snake.alive_amt === 1) {
-                if (bot.stage === 'grow') {
-                    bot.computeFoodGoal();
-                    window.goalCoordinates = bot.currentFood;
+                if (stage === 'grow') {
+                    computeFoodGoal();
+                    window.goalCoordinates = currentFood;
                     canvas.setMouseCoordinates(canvas.mapToMouse(window.goalCoordinates));
-                } else if (bot.stage === 'tocircle') {
-                    bot.toCircle();
+                } else if (stage === 'tocircle') {
+                    toCircle();
                 }
             }
-            bot.actionTimeout = undefined;
+            actionTimeout = undefined;
         }
     };
 })(window);

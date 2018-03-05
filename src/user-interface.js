@@ -35,7 +35,7 @@ var UserInterface = window.userInterface = (function (window, document) {
             serverDiv.appendChild(serverIn);
             parent.appendChild(serverDiv);
 
-            userInterface.server = serverIn;
+            UserInterface.server = serverIn;
         },
 
         initOverlays: function () {
@@ -100,24 +100,24 @@ var UserInterface = window.userInterface = (function (window, document) {
             statsOverlay.className = 'nsi';
             document.body.appendChild(statsOverlay);
 
-            userInterface.overlays.botOverlay = botOverlay;
-            userInterface.overlays.serverOverlay = serverOverlay;
-            userInterface.overlays.prefOverlay = prefOverlay;
-            userInterface.overlays.statsOverlay = statsOverlay;
+            UserInterface.overlays.botOverlay = botOverlay;
+            UserInterface.overlays.serverOverlay = serverOverlay;
+            UserInterface.overlays.prefOverlay = prefOverlay;
+            UserInterface.overlays.statsOverlay = statsOverlay;
         },
 
         toggleOverlays: function () {
-            Object.keys(userInterface.overlays).forEach(function (okey) {
-                var oVis = userInterface.overlays[okey].style.visibility !== 'hidden' ?
+            Object.keys(UserInterface.overlays).forEach(function (okey) {
+                var oVis = UserInterface.overlays[okey].style.visibility !== 'hidden' ?
                     'hidden' : 'visible';
-                userInterface.overlays[okey].style.visibility = oVis;
+                UserInterface.overlays[okey].style.visibility = oVis;
                 window.visualDebugging = oVis === 'visible';
             });
         },
 
 
         toggleGfx: function () {
-            if (userInterface.gfxEnabled) {
+            if (UserInterface.gfxEnabled) {
                 var c = window.mc.getContext('2d');
                 c.save();
                 c.fillStyle = "#000000",
@@ -138,21 +138,21 @@ var UserInterface = window.userInterface = (function (window, document) {
                 d.style.textAlign = 'center';
                 d.className = 'nsi';
                 document.body.appendChild(d);
-                userInterface.gfxOverlay = d;
+                UserInterface.gfxOverlay = d;
 
                 window.lbf.innerHTML = '';
             } else {
-                document.body.removeChild(userInterface.gfxOverlay);
-                userInterface.gfxOverlay = undefined;
+                document.body.removeChild(UserInterface.gfxOverlay);
+                UserInterface.gfxOverlay = undefined;
             }
 
-            userInterface.gfxEnabled = !userInterface.gfxEnabled;
+            UserInterface.gfxEnabled = !UserInterface.gfxEnabled;
         },
 
         // Save variable to local storage
         savePreference: function (item, value) {
             window.localStorage.setItem(item, value);
-            userInterface.onPrefChange();
+            UserInterface.onPrefChange();
         },
 
         // Load a variable from local storage
@@ -172,18 +172,18 @@ var UserInterface = window.userInterface = (function (window, document) {
                 window.log('No setting found for ' + preference +
                     '. Used default: ' + window[preference]);
             }
-            userInterface.onPrefChange();
+            UserInterface.onPrefChange();
             return window[preference];
         },
 
         // Saves username when you click on "Play" button
         playButtonClickListener: function () {
-            userInterface.saveNick();
-            userInterface.loadPreference('autoRespawn', false);
-            userInterface.onPrefChange();
+            UserInterface.saveNick();
+            UserInterface.loadPreference('autoRespawn', false);
+            UserInterface.onPrefChange();
 
-            if (userInterface.server.value) {
-                let s = userInterface.server.value.split(':');
+            if (UserInterface.server.value) {
+                let s = UserInterface.server.value.split(':');
                 if (s.length === 2) {
                     window.force_ip = s[0];
                     window.force_port = s[1];
@@ -198,7 +198,7 @@ var UserInterface = window.userInterface = (function (window, document) {
         // Preserve nickname
         saveNick: function () {
             var nick = document.getElementById('nick').value;
-            userInterface.savePreference('savedNick', nick);
+            UserInterface.savePreference('savedNick', nick);
         },
 
         // Hide top score
@@ -219,7 +219,7 @@ var UserInterface = window.userInterface = (function (window, document) {
             fpsTimer: function () {
                 if (window.playing && window.fps && window.lrd_mtm) {
                     if (Date.now() - window.lrd_mtm > 970) {
-                        userInterface.framesPerSecond.fps = window.fps;
+                        UserInterface.framesPerSecond.fps = window.fps;
                     }
                 }
             }
@@ -241,31 +241,31 @@ var UserInterface = window.userInterface = (function (window, document) {
                 if (e.keyCode === 85) {
                     window.logDebugging = !window.logDebugging;
                     window.log('Log debugging set to: ' + window.logDebugging);
-                    userInterface.savePreference('logDebugging', window.logDebugging);
+                    UserInterface.savePreference('logDebugging', window.logDebugging);
                 }
                 // Letter 'Y' to toggle debugging (visual)
                 if (e.keyCode === 89) {
                     window.visualDebugging = !window.visualDebugging;
                     window.log('Visual debugging set to: ' + window.visualDebugging);
-                    userInterface.savePreference('visualDebugging', window.visualDebugging);
+                    UserInterface.savePreference('visualDebugging', window.visualDebugging);
                 }
                 // Letter 'I' to toggle autorespawn
                 if (e.keyCode === 73) {
                     window.autoRespawn = !window.autoRespawn;
                     window.log('Automatic Respawning set to: ' + window.autoRespawn);
-                    userInterface.savePreference('autoRespawn', window.autoRespawn);
+                    UserInterface.savePreference('autoRespawn', window.autoRespawn);
                 }
                 // Letter 'H' to toggle hidden mode
                 if (e.keyCode === 72) {
-                    userInterface.toggleOverlays();
+                    UserInterface.toggleOverlays();
                 }
                 // Letter 'G' to toggle graphics
                 if (e.keyCode === 71) {
-                    userInterface.toggleGfx();
+                    UserInterface.toggleGfx();
                 }
                 // Letter 'O' to change rendermode (visual)
                 if (e.keyCode === 79) {
-                    userInterface.toggleMobileRendering(!window.mobileRender);
+                    UserInterface.toggleMobileRendering(!window.mobileRender);
                 }
                 // Letter 'A' to increase collision detection radius
                 if (e.keyCode === 65) {
@@ -289,13 +289,13 @@ var UserInterface = window.userInterface = (function (window, document) {
                 // Letter 'Q' to quit to main menu
                 if (e.keyCode === 81) {
                     window.autoRespawn = false;
-                    userInterface.quit();
+                    UserInterface.quit();
                 }
                 // 'ESC' to quickly respawn
                 if (e.keyCode === 27) {
                     SlitherBot.quickRespawn();
                 }
-                userInterface.onPrefChange();
+                UserInterface.onPrefChange();
             }
         },
 
@@ -317,7 +317,7 @@ var UserInterface = window.userInterface = (function (window, document) {
             } else {
                 original_onmouseDown(e);
             }
-            userInterface.onPrefChange();
+            UserInterface.onPrefChange();
         },
 
         onmouseup: function () {
@@ -328,7 +328,7 @@ var UserInterface = window.userInterface = (function (window, document) {
         toggleMobileRendering: function (mobileRendering) {
             window.mobileRender = mobileRendering;
             window.log('Mobile rendering set to: ' + window.mobileRender);
-            userInterface.savePreference('mobileRender', window.mobileRender);
+            UserInterface.savePreference('mobileRender', window.mobileRender);
             // Set render mode
             if (window.mobileRender) {
                 window.render_mode = 1;
@@ -360,13 +360,13 @@ var UserInterface = window.userInterface = (function (window, document) {
                 oContent.push(i + 1 + '. ' + SlitherBot.scores[i]);
             }
 
-            userInterface.overlays.statsOverlay.innerHTML = oContent.join('<br/>');
+            UserInterface.overlays.statsOverlay.innerHTML = oContent.join('<br/>');
         },
 
         onPrefChange: function () {
             // Set static display options here.
             var oContent = [];
-            var ht = userInterface.handleTextColor;
+            var ht = UserInterface.handleTextColor;
 
             oContent.push('version: ' + GM_info.script.version);
             oContent.push('[T] bot: ' + ht(SlitherBot.isBotEnabled));
@@ -381,7 +381,7 @@ var UserInterface = window.userInterface = (function (window, document) {
             oContent.push('[ESC] quick respawn');
             oContent.push('[Q] quit to menu');
 
-            userInterface.overlays.prefOverlay.innerHTML = oContent.join('<br/>');
+            UserInterface.overlays.prefOverlay.innerHTML = oContent.join('<br/>');
         },
 
         onFrameUpdate: function () {
@@ -389,7 +389,7 @@ var UserInterface = window.userInterface = (function (window, document) {
             if (window.playing && window.snake !== null) {
                 let oContent = [];
 
-                oContent.push('fps: ' + userInterface.framesPerSecond.fps);
+                oContent.push('fps: ' + UserInterface.framesPerSecond.fps);
 
                 // Display the X and Y of the snake
                 oContent.push('x: ' +
@@ -405,21 +405,21 @@ var UserInterface = window.userInterface = (function (window, document) {
                     }
                 }
 
-                userInterface.overlays.botOverlay.innerHTML = oContent.join('<br/>');
+                UserInterface.overlays.botOverlay.innerHTML = oContent.join('<br/>');
 
-                if (userInterface.gfxOverlay) {
+                if (UserInterface.gfxOverlay) {
                     let gContent = [];
 
                     gContent.push('<b>' + window.snake.nk + '</b>');
                     gContent.push(SlitherBot.snakeLength);
                     gContent.push('[' + window.rank + '/' + window.snake_count + ']');
 
-                    userInterface.gfxOverlay.innerHTML = gContent.join('<br/>');
+                    UserInterface.gfxOverlay.innerHTML = gContent.join('<br/>');
                 }
 
-                if (window.bso !== undefined && userInterface.overlays.serverOverlay.innerHTML !==
+                if (window.bso !== undefined && UserInterface.overlays.serverOverlay.innerHTML !==
                     window.bso.ip + ':' + window.bso.po) {
-                    userInterface.overlays.serverOverlay.innerHTML =
+                    UserInterface.overlays.serverOverlay.innerHTML =
                         window.bso.ip + ':' + window.bso.po;
                 }
             }
@@ -441,7 +441,7 @@ var UserInterface = window.userInterface = (function (window, document) {
             var start = Date.now();
             canvas.maintainZoom();
             original_oef();
-            if (userInterface.gfxEnabled) {
+            if (UserInterface.gfxEnabled) {
                 original_redraw();
             } else {
                 window.visualDebugging = false;
@@ -458,7 +458,7 @@ var UserInterface = window.userInterface = (function (window, document) {
                 if (window.lastscore && window.lastscore.childNodes[1]) {
                     SlitherBot.scores.push(parseInt(window.lastscore.childNodes[1].innerHTML));
                     SlitherBot.scores.sort(function (a, b) { return b - a; });
-                    userInterface.updateStats();
+                    UserInterface.updateStats();
                 }
 
                 if (window.autoRespawn) {
@@ -470,13 +470,13 @@ var UserInterface = window.userInterface = (function (window, document) {
                 window.onmousemove = original_onmousemove;
             }
 
-            userInterface.onFrameUpdate();
+            UserInterface.onFrameUpdate();
 
             if (!SlitherBot.isBotEnabled && !window.no_raf) {
-                window.raf(userInterface.oefTimer);
+                window.raf(UserInterface.oefTimer);
             } else {
                 setTimeout(
-                    userInterface.oefTimer, (1000 / SlitherBot.opt.targetFps) - (Date.now() - start));
+                    UserInterface.oefTimer, (1000 / SlitherBot.opt.targetFps) - (Date.now() - start));
             }
         },
 

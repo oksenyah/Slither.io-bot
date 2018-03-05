@@ -1234,11 +1234,9 @@ var SlitherBot = window.bot = (function (window) {
             window.log('Angle Index: ' + angleIndex);
             SlitherBot.headCircle = canvas.arc(
                 //Snake X coord
-                window.snake.xx + SlitherBot.cos * Math.min(1, SlitherBot.speedMult - 1) *
-                SlitherBot.opt.radiusMult / 2 * SlitherBot.snakeRadius,
+                window.snake.xx,
                 //Snake Y coord
-                window.snake.yy + SlitherBot.sin * Math.min(1, SlitherBot.speedMult - 1) *
-                SlitherBot.opt.radiusMult / 2 * SlitherBot.snakeRadius,
+                window.snake.yy,
                 //Radius of Arc
                 SlitherBot.opt.radiusMult / 2 * SlitherBot.snakeRadius,
                 //Starting angle

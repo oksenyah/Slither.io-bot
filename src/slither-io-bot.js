@@ -1217,12 +1217,27 @@ var SlitherBot = window.bot = (function (window) {
             SlitherBot.snakeLength = Math.floor(15 * (window.fpsls[window.snake.sct] + window.snake.fam /
                 window.fmlts[window.snake.sct] - 1) - 5);
 
-            SlitherBot.headCircle = canvas.circle(
+//            SlitherBot.headCircle = canvas.circle(
+//                window.snake.xx + SlitherBot.cos * Math.min(1, SlitherBot.speedMult - 1) *
+//                SlitherBot.opt.radiusMult / 2 * SlitherBot.snakeRadius,
+//                window.snake.yy + SlitherBot.sin * Math.min(1, SlitherBot.speedMult - 1) *
+//                SlitherBot.opt.radiusMult / 2 * SlitherBot.snakeRadius,
+//                SlitherBot.opt.radiusMult / 2 * SlitherBot.snakeRadius
+//            );
+            var angleIndex = SlitherBot.getAngleIndex(SlitherBot.currentFood.ang);
+            SlitherBot.headCircle = canvas.arc(
+                //Snake X coord
                 window.snake.xx + SlitherBot.cos * Math.min(1, SlitherBot.speedMult - 1) *
                 SlitherBot.opt.radiusMult / 2 * SlitherBot.snakeRadius,
+                //Snake Y coord
                 window.snake.yy + SlitherBot.sin * Math.min(1, SlitherBot.speedMult - 1) *
                 SlitherBot.opt.radiusMult / 2 * SlitherBot.snakeRadius,
-                SlitherBot.opt.radiusMult / 2 * SlitherBot.snakeRadius
+                //Radius of Arc
+                SlitherBot.opt.radiusMult / 2 * SlitherBot.snakeRadius,
+                //Starting angle
+                angleIndex - window.snake.wang,
+                //Ending angle
+                angleIndex + window.snake.eang
             );
 
             SlitherBot.sidecircle_r = canvas.circle(

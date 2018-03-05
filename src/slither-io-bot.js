@@ -334,6 +334,8 @@ var SlitherBot = window.bot = (function (window) {
 
             window.log('Head Circle:');
             window.log(SlitherBot.headCircle);
+            window.log('Snake:');
+            window.log(window.snake);
 
             for (var snake = 0, ls = window.snakes.length; snake < ls; snake++) {
                 scPoint = undefined;
@@ -1237,9 +1239,9 @@ var SlitherBot = window.bot = (function (window) {
                 //Radius of Arc
                 SlitherBot.opt.radiusMult / 2 * SlitherBot.snakeRadius,
                 //Starting angle
-                angleIndex - window.snake.wang,
+                angleIndex - window.snake.ang,
                 //Ending angle
-                angleIndex + window.snake.eang
+                angleIndex + window.snake.ang
             );
 
             SlitherBot.sidecircle_r = canvas.circle(

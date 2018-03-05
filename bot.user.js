@@ -33,6 +33,7 @@ window.log = function () {
     window.play_btn.btnf.addEventListener('click', UserInterface.playButtonClickListener);
     document.onkeydown = UserInterface.onkeydown;
     window.onmousedown = UserInterface.onmousedown;
+    console.log('Attempting to add window eventListener...');
     window.addEventListener('mouseup', UserInterface.onmouseup);
 
     // Hide top score
@@ -40,6 +41,7 @@ window.log = function () {
 
     // force server
     UserInterface.initServerIp();
+    console.log('Attempting to add server eventListener...');
     UserInterface.server.addEventListener('keyup', function (e) {
         if (e.keyCode === 13) {
             e.preventDefault();
@@ -58,6 +60,7 @@ window.log = function () {
     window.nick.value = UserInterface.loadPreference('savedNick', 'not-a-bot');
 
     // Listener for mouse wheel scroll - used for setZoom function
+    console.log('Attempting to add document.body eventListener...');
     document.body.addEventListener('mousewheel', Canvas.setZoom);
     document.body.addEventListener('DOMMouseScroll', Canvas.setZoom);
 

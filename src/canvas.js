@@ -69,6 +69,19 @@ var Canvas = window.canvas = (function (window) {
             return c;
         },
 
+        // Constructor for arc type
+        arc: function (a, b, r, x, y) {
+            var a = {
+                a: Math.round(a),
+                b: Math.round(b),
+                r: Math.round(r),
+                x: Math.round(x),
+                y: Math.round(y)
+            };
+
+            return a;
+        },
+
         // Fast atan2
         fastAtan2: function (y, x) {
             const QPI = Math.PI / 4;
@@ -152,6 +165,25 @@ var Canvas = window.canvas = (function (window) {
             context.beginPath();
             context.strokeStyle = color;
             context.arc(drawCircle.x, drawCircle.y, drawCircle.radius, 0, Math.PI * 2);
+            context.stroke();
+            if (fill) {
+                context.fillStyle = color;
+                context.fill();
+            }
+            context.restore();
+        },
+
+        // Draw an arc on the Canvas.
+        drawArc: function (arc, color, fill, alpha) {
+            if (alpha === undefined) alpha = 1;
+
+            var context = window.mc.getContext('2d');
+            var lc = Canvas.mapToCanvas({ x: rect.x, y: rect.y });
+
+            context.save();
+            context.globalAlpha = alpha;
+            context.strokeStyle = color;
+            context.arc(arc.a, arc.b, arc.r * window.gsc, arc.x, arc.y);
             context.stroke();
             if (fill) {
                 context.fillStyle = color;

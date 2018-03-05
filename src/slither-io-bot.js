@@ -1262,7 +1262,7 @@ var SlitherBot = window.bot = (function (window) {
 
 
             if (window.visualDebugging) {
-                canvas.drawCircle(SlitherBot.headCircle, 'blue', false);
+                canvas.drawArc(SlitherBot.headCircle, 'blue', false);
                 canvas.drawCircle(SlitherBot.sidecircle_r, 'green', false);
                 canvas.drawCircle(SlitherBot.sidecircle_l, 'green', false);
             }

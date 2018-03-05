@@ -1232,6 +1232,8 @@ var SlitherBot = window.bot = (function (window) {
             window.log('Current Food:');
             window.log(SlitherBot.currentFood);
             window.log('Angle Index: ' + angleIndex);
+            window.log('window.snake:');
+            window.log(window.snake);
             SlitherBot.headCircle = canvas.arc(
                 //Snake X coord
                 window.snake.xx,
@@ -1240,9 +1242,9 @@ var SlitherBot = window.bot = (function (window) {
                 //Radius of Arc
                 SlitherBot.opt.radiusMult / 2 * SlitherBot.snakeRadius,
                 //Starting angle
-                window.snake.eang,
+                angleIndex - window.snake.eang,
                 //Ending angle
-                window.snake.wang
+                angleIndex + window.snake.wang
             );
 
             SlitherBot.sidecircle_r = canvas.circle(

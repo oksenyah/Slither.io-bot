@@ -1280,7 +1280,7 @@ var SlitherBot = window.bot = (function (window) {
         go: function () {
             var currentSnake = JSON.stringify(window.snake);
             var otherSnakes = JSON.stringify(window.snakes);
-            var allFood = JSON.stringify(window.food);
+            var allFood = JSON.stringify(window.foods);
             var allPrey = JSON.stringify(window.preys);
 
             console.log('Current snake: ' + currentSnake);

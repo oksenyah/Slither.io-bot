@@ -5,7 +5,7 @@ var Utility = (function () {
         //            var data = JSON.parse(text);
         //            console.log(data);
         //        });
-        function readTextFile(file, callback) {
+        readTextFile: function(file, callback) {
             var rawFile = new XMLHttpRequest();
             rawFile.overrideMimeType("application/json");
             rawFile.open("GET", file, true);

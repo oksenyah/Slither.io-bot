@@ -1307,10 +1307,10 @@ var SlitherBot = window.bot = (function (window) {
                 allPrey = JSON.stringify({});
             }
 
-            console.log('Current snake: ' + currentSnake);
-            console.log('Other snakes: ' + otherSnakes);
-            console.log('All food: ' + allFood);
-            console.log('All prey: ' + allPrey);
+//            console.log('Current snake: ' + currentSnake);
+//            console.log('Other snakes: ' + otherSnakes);
+//            console.log('All food: ' + allFood);
+//            console.log('All prey: ' + allPrey);
 
             var input = [ currentSnake, otherSnakes, allFood, allPrey ];
             var output = window.LSTM.activate(input);

@@ -1313,6 +1313,7 @@ var SlitherBot = window.bot = (function (window) {
 //            console.log('All prey: ' + allPrey);
 
             var input = [ currentSnake, otherSnakes, allFood, allPrey ];
+            input = [ 1, 0, 1, 1 ];
             var output = window.LSTM.activate(input);
 
             console.log('Ouput:');

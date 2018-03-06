@@ -1278,7 +1278,17 @@ var SlitherBot = window.bot = (function (window) {
 
         // Main bot
         go: function () {
-            var input = [ JSON.toString(window.snake), JSON.toString(window.snakes), JSON.toString(window.food), JSON.toString(window.preys) ];
+            var currentSnake = JSON.toString(window.snake);
+            var otherSnakes = JSON.toString(window.snakes);
+            var allFood = JSON.toString(window.food);
+            var allPrey = JSON.toString(window.preys);
+
+            console.log('Current snake: ' + currentSnake);
+            console.log('Other snakes: ' + otherSnakes);
+            console.log('All food: ' + allFood);
+            console.log('All prey: ' + allPrey);
+
+            var input = [ currentSnake, otherSnakes, allFood, allPrey ];
             var output = window.LSTM.activate(input);
 
             console.log('Ouput:');

@@ -38,7 +38,7 @@ The MIT License (MIT)
     };
 
     //TODO remove after testing.
-    readTextFile("/Users/Public/Documents/test/data.json", function(text){
+    Utility.readTextFile("/Users/Public/Documents/test/data.json", function(text){
         var data = JSON.parse(text);
         console.log(data);
     });

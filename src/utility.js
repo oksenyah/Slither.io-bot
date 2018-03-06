@@ -11,6 +11,7 @@ var Utility = (function () {
             rawFile.open("GET", file, true);
             rawFile.onreadystatechange = function() {
                 if (rawFile.readyState === 4 && rawFile.status == "200") {
+                    console.log(rawFile.responseText);
                     callback(rawFile.responseText);
                 }
             }

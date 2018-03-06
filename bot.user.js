@@ -83,7 +83,7 @@ The MIT License (MIT)
 
     //Inputs: current snake, snakes, food, and prey.
     //Outputs: keyleft, keyright, spacebar
-    window.LSTM = new Architect.LSTM(4,4,4,4,4,3);
+    window.LSTM = new synaptic.Architect.LSTM(4,4,4,4,4,3);
 
     // Start!
     UserInterface.oefTimer();

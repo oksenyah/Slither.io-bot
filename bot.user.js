@@ -9,7 +9,7 @@ The MIT License (MIT)
 // @name         Slither.io Bot Championship Edition
 // @namespace    https://github.com/oksenyah/Slither.io-bot
 // @version      3.0.6.3
-// @description  Slither.io Bot Championship Edition
+// @description  Slither.io Bot ML
 // @author       Ok Senyah
 // @match        http://slither.io/
 // @updateURL    https://github.com/oksenyah/Slither.io-bot/raw/testing/bot.user.js
@@ -18,6 +18,7 @@ The MIT License (MIT)
 // @require      src/slither-io-bot.js
 // @require      src/user-interface.js
 // @require      src/canvas.js
+// @require      https://cdnjs.cloudflare.com/ajax/libs/synaptic/1.1.4/synaptic.js
 // @grant        none
 // ==/UserScript==
 
@@ -79,6 +80,10 @@ The MIT License (MIT)
 
     // Maintain fps
     setInterval(UserInterface.framesPerSecond.fpsTimer, 80);
+
+    //Inputs: current snake, snakes, food, and prey.
+    //Outputs: keyleft, keyright, spacebar
+    window.LSTM = new Architect.LSTM(4,4,4,4,4,3);
 
     // Start!
     UserInterface.oefTimer();

@@ -1278,6 +1278,12 @@ var SlitherBot = window.bot = (function (window) {
 
         // Main bot
         go: function () {
+            var input = [ JSON.toString(window.snake), JSON.toString(window.snakes), JSON.toString(window.food), JSON.toString(window.preys) ];
+            var output = window.LSTM.activate(input);
+
+            console.log('Ouput:');
+            console.log(output);
+
             SlitherBot.every();
 
             if (SlitherBot.snakeLength < SlitherBot.opt.followCircleLength) {

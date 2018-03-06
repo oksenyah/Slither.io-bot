@@ -18,7 +18,6 @@ The MIT License (MIT)
 // @require      src/slither-io-bot.js
 // @require      src/user-interface.js
 // @require      src/canvas.js
-// @require      src/utility.js
 // @grant        none
 // ==/UserScript==
 
@@ -36,12 +35,6 @@ The MIT License (MIT)
             console.log.apply(console, arguments);
         }
     };
-
-    //TODO remove after testing.
-    Utility.readTextFile("C:/Users/Public/Documents/test/data.json", function(text){
-        var data = JSON.parse(text);
-        console.log(data);
-    });
 
     // Hide top score
     UserInterface.hideTop();
